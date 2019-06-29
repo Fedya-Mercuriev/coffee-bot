@@ -1,0 +1,8 @@
+node_modules
+.idea
+.history
+.env
+.DS_Store
+package-lock.json
+Thumbs.db
+dist/**/*

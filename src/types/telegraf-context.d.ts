@@ -4,5 +4,6 @@ declare module 'telegraf' {
     interface ContextMessageUpdate {
         i18n: I18n;
         scene: any;
+        previousScene: string;
     }
 }

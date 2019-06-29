@@ -6,7 +6,7 @@ import TelegrafI18n, { match } from 'telegraf-i18n';
 import Stage from 'telegraf/stage';
 import session from 'telegraf/session';
 import startScene from './controllers/start';
-import menuScene from './controllers/menu';
+import orderScene from './controllers/order';
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
     directory: path.resolve(__dirname, 'locales'),
@@ -18,7 +18,7 @@ const i18n = new TelegrafI18n({
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const stage = new Stage([
     startScene,
-    menuScene
+    orderScene
 ]);
 
 bot.use(session());

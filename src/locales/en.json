@@ -1,0 +1,18 @@
+{
+  "scenes": {
+    "start": {
+      "welcome": "Bot launched!"
+    },
+    "menu": {
+      "welcome": "You're now in main menu"
+    }
+  },
+  "menus": {
+    "main": {
+      "order": "Make an order",
+      "cart": "My Cart",
+      "about": "About us",
+      "contacts": "Contacts"
+    }
+  }
+}

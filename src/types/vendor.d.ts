@@ -1,5 +1,5 @@
 interface BotContext {
-    addScene: Function;
+    iAmHere: Function;
     previousScene: Function;
 }
 interface Operation {

@@ -4,7 +4,7 @@ declare module 'telegraf' {
     interface ContextMessageUpdate {
         i18n: I18n;
         scene: any;
-        scenes: BotContext;
+        botScenes: BotContext;
         session: any;
     }
 }

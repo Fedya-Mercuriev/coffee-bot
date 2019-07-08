@@ -1,16 +1,21 @@
-import _ from 'lodash';
 import { ContextMessageUpdate } from 'telegraf';
 import Stage from 'telegraf/stage';
 import Scene from 'telegraf/scenes/base';
-import { processCbData } from "./middlewares";
+import app from '../../_app';
+import navigateToScene from '../../middlewares/navigate-scene';
+import invokeFunction from '../../middlewares/invoke-function';
 import { getMenu } from '../../util/keyboards';
 
+const sceneId = 'start';
 const { Leave } = Stage;
-const start = new Scene('start');
+const start = new Scene(sceneId);
 
-start.use(processCbData);
+start.use(
+    navigateToScene,
+    invokeFunction
+);
 
-start.enter(async (ctx: ContextMessageUpdate) => {
+start.enter(async(ctx: ContextMessageUpdate) => {
     const menuStructure = [
         {
             title: ctx.i18n.t('menus.main.order'),
@@ -37,11 +42,15 @@ start.enter(async (ctx: ContextMessageUpdate) => {
             }
         }
     ];
-    const menu = getMenu(ctx, menuStructure);
-    await ctx.reply(ctx.i18n.t('scenes.start.welcome'), menu.extra());
-});
-start.command('menu', (ctx: ContextMessageUpdate) => {
-    ctx.scene.enter('menu');
+
+    if (!ctx.session.started) {
+        await app.start(ctx);
+
+        ctx.botScenes.iAmHere(ctx, sceneId);
+        await ctx.reply(ctx.i18n.t('scenes.start.welcome'), getMenu(ctx, menuStructure).extra());
+    } else {
+        await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), getMenu(ctx, menuStructure).extra());
+    }
 });
 
 export default start;

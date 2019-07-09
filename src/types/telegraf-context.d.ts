@@ -5,6 +5,6 @@ declare module 'telegraf' {
         i18n: I18n;
         scene: any;
         botScenes: BotContext;
-        session: any;
+        session: SessionStorage;
     }
 }

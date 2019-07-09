@@ -66,7 +66,7 @@ class App {
     // Invokes all operations at the start of the app
     start(ctx: ContextMessageUpdate) {
         ctx.session.started = true;
-        ctx.session.currentScene = '';
+        ctx.session.sceneMessages = [];
         ctx.session.scenesMap = [];
     }
 }

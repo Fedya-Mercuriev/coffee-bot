@@ -30,10 +30,10 @@ bot.use(stage.middleware());
 // Adding functions to process scenes
 bot.context.botScenes = {
     /**
+     * Tells bot where user is and either adds scene to map or removes it
      * @param ctx - Message update object
      * @param sceneName - Name of the current scene
     * */
-    // Tells bot where user is and either adds scene to map or removes it
     iAmHere: (ctx: ContextMessageUpdate, sceneName: string): void => {
         const sceneIndex = ctx.session.scenesMap.indexOf(sceneName);
 
@@ -43,9 +43,23 @@ bot.context.botScenes = {
           ctx.session.scenesMap = (sceneIndex) ? ctx.session.scenesMap.slice(0, sceneIndex) : [ctx.session.scenesMap[0]];
         }
     },
-    // Returns name of a previous scene in a map
+    /**
+    * Returns name of a previous scene in a map
+    * @param ctx - Message update object
+    * */
     previousScene: async (ctx: ContextMessageUpdate): Promise<string> => {
         return ctx.session.scenesMap[ctx.session.scenesMap.length - 2]
+    },
+    /**
+     * Places a returned message object into collection - the collection will be used to clear scene
+    * */
+    set collectMsg(messageObject: any) {
+        const { id } = messageObject;
+        const ctx: ContextMessageUpdate = this;
+
+        if (ctx.session.sceneMessages.indexOf(id) === -1) {
+            ctx.session.sceneMessages.push(id);
+        }
     }
 };
 

@@ -4,7 +4,7 @@ import Scene from 'telegraf/scenes/base';
 import app from '../../_app';
 import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
-import { getMenu } from '../../util/keyboards';
+import { buildMenu } from '../../util/keyboards';
 
 const sceneId = 'start';
 const { Leave } = Stage;
@@ -47,9 +47,9 @@ start.enter(async(ctx: ContextMessageUpdate) => {
         await app.start(ctx);
 
         ctx.botScenes.iAmHere(ctx, sceneId);
-        await ctx.reply(ctx.i18n.t('scenes.start.welcome'), getMenu(ctx, menuStructure).extra());
+        ctx.botScenes.collectMsg = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     } else {
-        await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), getMenu(ctx, menuStructure).extra());
+        ctx.botScenes.collectMsg = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     }
 });
 

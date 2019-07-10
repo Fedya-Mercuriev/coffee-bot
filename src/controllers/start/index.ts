@@ -16,6 +16,7 @@ start.use(
 );
 
 start.enter(async(ctx: ContextMessageUpdate) => {
+    let message: ReturnedMessage|boolean;
     const menuStructure = [
         {
             title: ctx.i18n.t('menus.main.order'),
@@ -47,9 +48,11 @@ start.enter(async(ctx: ContextMessageUpdate) => {
         await app.start(ctx);
 
         ctx.botScenes.iAmHere(ctx, sceneId);
-        ctx.botScenes.collectMsg = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        message = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        ctx.botScenes.collectMsg(ctx, message);
     } else {
-        ctx.botScenes.collectMsg = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        message = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        ctx.botScenes.collectMsg(ctx, message);
     }
 });
 

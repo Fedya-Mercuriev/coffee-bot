@@ -53,12 +53,13 @@ bot.context.botScenes = {
     /**
      * Places a returned message object into collection - the collection will be used to clear scene
     * */
-    set collectMsg(messageObject: any) {
-        const { id } = messageObject;
-        const ctx: ContextMessageUpdate = this;
+    collectMsg(ctx: ContextMessageUpdate, message: ReturnedMessage|boolean) {
+        if (typeof message !== 'boolean') {
+            const { message_id } = message;
 
-        if (ctx.session.sceneMessages.indexOf(id) === -1) {
-            ctx.session.sceneMessages.push(id);
+            if (ctx.session.sceneMessages.indexOf(message_id) === -1) {
+                ctx.session.sceneMessages.push(message_id);
+            }
         }
     }
 };

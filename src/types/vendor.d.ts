@@ -1,3 +1,6 @@
+interface ReturnedMessage {
+    [key: string]: any;
+}
 interface SessionStorage {
     started: boolean;
     sceneMessages: number[];
@@ -6,7 +9,6 @@ interface SessionStorage {
     orderInfoMsg: any;
     menu: object;
 }
-
 interface BotContext {
     iAmHere: Function;
     previousScene: Function;

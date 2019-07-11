@@ -49,18 +49,6 @@ bot.context.botScenes = {
     * */
     previousScene: async (ctx: ContextMessageUpdate): Promise<string> => {
         return ctx.session.scenesMap[ctx.session.scenesMap.length - 2]
-    },
-    /**
-     * Places a returned message object into collection - the collection will be used to clear scene
-    * */
-    collectMsg(ctx: ContextMessageUpdate, message: ReturnedMessage|boolean) {
-        if (typeof message !== 'boolean') {
-            const { message_id } = message;
-
-            if (ctx.session.sceneMessages.indexOf(message_id) === -1) {
-                ctx.session.sceneMessages.push(message_id);
-            }
-        }
     }
 };
 

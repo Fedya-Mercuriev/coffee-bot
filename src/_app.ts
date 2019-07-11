@@ -66,7 +66,22 @@ class App {
     // Invokes all operations at the start of the app
     start(ctx: ContextMessageUpdate) {
         ctx.session.started = true;
-        ctx.session.sceneMessages = [];
+        ctx.session.messages = {
+            _messages: [],
+            get storage() {
+              return this._messages;
+            },
+            set storage(message: ReturnedMessage) {
+                if (typeof message !== 'boolean') {
+                 const { message_id } = message;
+
+                    if (this._messages.indexOf(message_id) === -1) {
+                        this._messages.push(message_id);
+                    }
+                }
+            }
+
+        };
         ctx.session.scenesMap = [];
     }
 }

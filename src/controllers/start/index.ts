@@ -48,11 +48,9 @@ start.enter(async(ctx: ContextMessageUpdate) => {
         await app.start(ctx);
 
         ctx.botScenes.iAmHere(ctx, sceneId);
-        message = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
-        ctx.botScenes.collectMsg(ctx, message);
+        ctx.session.messages.storage = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     } else {
-        message = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
-        ctx.botScenes.collectMsg(ctx, message);
+        ctx.session.messages.storage = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     }
 });
 

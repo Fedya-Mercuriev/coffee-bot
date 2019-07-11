@@ -3,7 +3,7 @@ interface ReturnedMessage {
 }
 interface SessionStorage {
     started: boolean;
-    sceneMessages: number[];
+    messages: any;
     scenesMap: string[];
     order: object;
     orderInfoMsg: any;
@@ -12,7 +12,6 @@ interface SessionStorage {
 interface BotContext {
     iAmHere: Function;
     previousScene: Function;
-    collectMsg: any;
 }
 interface Operation {
     name: string;

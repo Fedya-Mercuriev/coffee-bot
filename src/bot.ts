@@ -4,7 +4,9 @@ import Telegraf, { ContextMessageUpdate, Extra, Markup } from 'telegraf';
 import TelegrafI18n, { match } from 'telegraf-i18n';
 import Stage from 'telegraf/stage';
 import session from 'telegraf/session';
-import start from './controllers/start';
+import start from './controllers/start/index';
+import cart from './controllers/cart/index';
+import contacts from './controllers/contacts/index';
 import about from './controllers/about/index';
 import order from './controllers/order/index';
 
@@ -19,6 +21,8 @@ const i18n = new TelegrafI18n({
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const stage = new Stage([
     start,
+    cart,
+    contacts,
     about,
     order
 ]);

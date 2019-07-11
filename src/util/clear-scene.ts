@@ -5,8 +5,8 @@ import { ContextMessageUpdate } from "telegraf";
 * @param ctx - Message update object
 * */
 export default async function clearScene(ctx: ContextMessageUpdate) {
-    if (ctx.session.sceneMessages && ctx.session.sceneMessages.length) {
-        ctx.session.sceneMessages.map(async (msg) => {
+    if (ctx.session.messages.storage.length) {
+        ctx.session.messages.storage.map(async (msg: number) => {
             await ctx.telegram.deleteMessage(ctx.chat.id, msg);
         })
     }

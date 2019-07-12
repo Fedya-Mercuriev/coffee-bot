@@ -10,4 +10,5 @@ export default async function clearScene(ctx: ContextMessageUpdate) {
             await ctx.telegram.deleteMessage(ctx.chat.id, msg);
         })
     }
+    ctx.session.messages.storage = [];
 }

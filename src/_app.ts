@@ -71,13 +71,17 @@ class App {
             get storage() {
               return this._messages;
             },
-            set storage(message: ReturnedMessage) {
-                if (typeof message !== 'boolean') {
+            set storage(message: ReturnedMessage|[]) {
+                if (typeof message !== 'boolean' && !_.isArray(message)) {
                  const { message_id } = message;
 
                     if (this._messages.indexOf(message_id) === -1) {
                         this._messages.push(message_id);
                     }
+                } else if (_.isArray(message)) {
+                    this._messages.length = 0;
+                } else {
+                    return;
                 }
             }
 

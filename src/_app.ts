@@ -83,6 +83,9 @@ class App {
                 } else {
                     return;
                 }
+            },
+            clearStorage() {
+                this._messages.length = 0;
             }
 
         };

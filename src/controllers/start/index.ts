@@ -5,6 +5,7 @@ import app from '../../_app';
 import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { buildMenu } from '../../util/keyboards';
+import clearScene from '../../util/clear-scene';
 
 const sceneId = 'start';
 const { Leave } = Stage;
@@ -50,8 +51,13 @@ start.enter(async(ctx: ContextMessageUpdate) => {
         ctx.botScenes.iAmHere(ctx, sceneId);
         ctx.session.messages.storage = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     } else {
+        await clearScene(ctx);
         ctx.session.messages.storage = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
     }
+});
+
+start.enter((ctx: ContextMessageUpdate) => {
+    ctx.session.messages.clearStorage();
 });
 
 export default start;

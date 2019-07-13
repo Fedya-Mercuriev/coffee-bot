@@ -23,7 +23,7 @@ cart.enter(async (ctx: ContextMessageUpdate) => {
             }
         }
     ];
-
+    ctx.session.messages.clearStorage();
     await ctx.editMessageText(ctx.i18n.t('scenes.cart.content'), buildMenu(ctx, menuStructure).extra());
 });
 

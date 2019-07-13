@@ -25,7 +25,13 @@ interface FunctionInvokingCallbackData {
     cb: string;
     args: string;
 }
-interface Menu {
+interface OrderData {
+    order: {
+        select: string;
+        value: string;
+    }
+}
+interface Menu<T> {
     title: string;
-    data: NavigationCallbackData|FunctionInvokingCallbackData;
+    data: T;
 }

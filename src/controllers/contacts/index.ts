@@ -23,7 +23,7 @@ contacts.enter(async (ctx: ContextMessageUpdate) => {
             }
         }
     ];
-
+    ctx.session.messages.clearStorage();
     await ctx.editMessageText(ctx.i18n.t('scenes.contacts.content'), buildMenu(ctx, menuStructure).extra());
 });
 

@@ -21,16 +21,26 @@ export function updateOrderInfo(ctx: ContextMessageUpdate) {
     }
 }
 
-export async function addNavigationToStructure(ctx: ContextMessageUpdate, items: any):Promise<any> {
-    let result = {};
+export async function addNavigationToStructure(items: any):Promise<any> {
+    let result:any = {};
 
-    for (let key in items) {
-        if (items[key].amount) {
-            items.scene = 'order_amount';
-        } else {
-            items.scene = 'order_additions';
+    Object.keys(items).forEach((item:string) => {
+        let productObject:any = {};
+
+        for (let key in items[item]) {
+            if (key === 'amount') {
+                if (items[item][key]) {
+                    items.scene = 'order_amount';
+                } else {
+                    items.scene = 'order_additions';
+                }
+            } else {
+                productObject[key] = items[item][key];
+            }
         }
-    }
+        result[item] = productObject;
+    });
+
     return result;
 }
 

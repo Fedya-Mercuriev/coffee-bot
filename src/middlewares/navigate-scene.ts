@@ -1,8 +1,8 @@
 import { ContextMessageUpdate } from "telegraf";
 
 export default async function navigateToScene(ctx: ContextMessageUpdate, next: Function) {
-    await ctx.answerCbQuery();
-    if (Object.keys(ctx.update.callback_query.data).length) {
+    if (ctx.updateType === 'callback_query') {
+        await ctx.answerCbQuery();
         const args = JSON.parse(ctx.update.callback_query.data);
 
         if (args.scene) {

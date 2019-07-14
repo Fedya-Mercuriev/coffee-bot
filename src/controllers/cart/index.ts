@@ -15,16 +15,16 @@ cart.use(
 );
 
 cart.enter(async (ctx: ContextMessageUpdate) => {
-    const menuStructure = [
-        {
+    const menuStructure = {
+        back: {
             title: ctx.i18n.t('buttons.back'),
             data: {
                 scene: await ctx.botScenes.previousScene(ctx)
             }
         }
-    ];
+    };
     ctx.session.messages.clearStorage();
-    await ctx.editMessageText(ctx.i18n.t('scenes.cart.content'), buildMenu(ctx, menuStructure).extra());
+    await ctx.editMessageText(ctx.i18n.t('scenes.cart.content'), buildMenu(menuStructure).extra());
 });
 
 export default cart;

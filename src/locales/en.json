@@ -25,6 +25,33 @@
       "contacts": "Contacts"
     }
   },
+  "goods": {
+    "drinks": {
+      "americano": "Americano",
+      "cappuccino": "Capuccino",
+      "latte": "Latte",
+      "flat-white": "Flat-White",
+      "raf": "Raff",
+      "peanut-latte": "Peanut Latte",
+      "banana-latte": "Banana Latte"
+    },
+    "amounts": {
+      "small": "small",
+      "middle": "middle",
+      "large": "large"
+    },
+    "additions": {
+      "sugar": "Sugar",
+      "cinnamon": "Cinnamon",
+      "syrups": {
+        "berry": "Berry",
+        "ginger-bread": "Ginger Bread"
+      }
+    }
+  },
+  "orderItems": {
+    "additions": "Additions"
+  },
   "buttons": {
     "back": "Back"
   }

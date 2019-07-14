@@ -25,6 +25,33 @@
       "contacts": "Контакты"
     }
   },
+  "goods": {
+    "drinks": {
+      "americano": "Американо",
+      "cappuccino": "Каппучино",
+      "latte": "Латте",
+      "flat-white": "Флэт-Уайт",
+      "raf": "Раф",
+      "peanut-latte": "Арахисовый латте",
+      "banana-latte": "Банановый латте"
+    },
+    "amounts": {
+      "small": "маленький",
+      "middle": "средний",
+      "large": "большой"
+    },
+    "additions": {
+      "sugar": "Сахар",
+      "cinnamon": "Корица",
+      "syrups": {
+        "berry": "Ягодный",
+        "ginger-bread": "Имбирный пряник"
+      }
+    }
+  },
+  "orderItems": {
+    "additions": "Добавки"
+  },
   "buttons": {
     "back": "Назад"
   }

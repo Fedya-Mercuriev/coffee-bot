@@ -1,9 +1,9 @@
 import { Markup, ContextMessageUpdate, CallbackButton } from "telegraf";
 
-export function buildMenu(ctx: ContextMessageUpdate, options: Menu[]): any {
+export function buildMenu<T>(ctx: ContextMessageUpdate, options: T[] ): any {
     let result: Array<CallbackButton>[] = [];
 
-    options.forEach((item, index) => {
+    options.forEach((item: any) => {
         result.push([
             Markup.callbackButton(item.title, JSON.stringify(item.data))
         ])

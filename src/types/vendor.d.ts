@@ -5,9 +5,23 @@ interface SessionStorage {
     started: boolean;
     messages: any;
     scenesMap: string[];
-    order: object;
-    orderInfoMsg: any;
+    order: OrderObject;
+    orderInfoMsg: string;
     menu: object;
+}
+interface OrderObject {
+    [key: string]: any;
+    drink: string;
+    amount: boolean|Amount;
+    additions: boolean|Addition[];
+}
+interface Amount {
+    title: string;
+    content: number;
+}
+interface Addition {
+    title: string;
+    quantity: number;
 }
 interface BotContext {
     iAmHere: Function;
@@ -26,10 +40,8 @@ interface FunctionInvokingCallbackData {
     args: string;
 }
 interface OrderData {
-    order: {
-        select: string;
-        value: string;
-    }
+    select: string;
+    value: string;
 }
 interface Menu<T> {
     title: string;

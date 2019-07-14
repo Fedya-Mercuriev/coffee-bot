@@ -1,41 +1,47 @@
-import {ContextMessageUpdate} from "telegraf";
+import { ContextMessageUpdate } from "telegraf";
 
+/**
+ * Adds all necessary properties to session when order is started
+ * @param ctx - context message update object
+* */
 export function init(ctx: ContextMessageUpdate):void {
     ctx.session.order = {
-        drink: null,
-        amount: null,
-        additions: null
+        title: null,
+        amount: {
+            title: null,
+            value: null
+        },
+        price: null,
+        additions: []
     };
     ctx.session.orderInfoMsg = `* ${ctx.i18n.t('scenes.order.orderInfoContent')} *`;
-    ctx.session.menu = {};
+    ctx.session.currentMenu = new Map();
 }
 
-export function updateOrderInfo(ctx: ContextMessageUpdate) {
-    if (ctx.updateType === 'callback_query') {
-        ctx.answerCbQuery('Обновляю ваш заказ...');
-        const args:OrderData = JSON.parse(ctx.update.callback_query.data);
-
-        if (args.order) {
-            ctx.session.order[args.order.select] = args.order.value;
-        }
-    }
-}
-
-export async function addNavigationToStructure(items: any):Promise<any> {
+/**
+ Adds links to scenes from the provided array depending on value of a desired property
+ * @param items - an object of assumed menu items
+ * @param scenes - an array of scenes (next(the scene that can be skipped) and the one after the next scene)
+* */
+export async function addNavigationToStructure(items: any, scenes: [string, string]):Promise<any> {
     let result:any = {};
 
     Object.keys(items).forEach((item:string) => {
-        let productObject:any = {};
+        let productObject:any = {order: {}};
 
         for (let key in items[item]) {
-            if (key === 'amount') {
-                if (items[item][key]) {
-                    items.scene = 'order_amount';
-                } else {
-                    items.scene = 'order_additions';
-                }
-            } else {
+            if (key === 'title') {
                 productObject[key] = items[item][key];
+            } else {
+                if (key === 'amount') {
+                    if (items[item][key]) {
+                        productObject.scene = scenes[0];
+                    } else {
+                        productObject.scene = scenes[1];
+                    }
+                } else {
+                    productObject.order[key] = items[item][key];
+                }
             }
         }
         result[item] = productObject;
@@ -44,6 +50,20 @@ export async function addNavigationToStructure(items: any):Promise<any> {
     return result;
 }
 
+/**
+ * Returns a list with a string type from the chosen additions
+ * @param additions - an array of chosen additions
+* */
+export function getAdditionsString(additions:any):string {
+    let result = '';
+    //TODO Сделать функцию, выдающую строку с списком добавок и их количеством
+    return result;
+}
+
+/**
+ * Deletes an object with properties necessary for order processing
+ * @param ctx - context message update object
+* */
 export function finish(ctx: ContextMessageUpdate):void {
     delete ctx.session.order;
 }

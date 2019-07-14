@@ -17,47 +17,42 @@ start.use(
 );
 
 start.enter(async(ctx: ContextMessageUpdate) => {
-    let message: ReturnedMessage|boolean;
-    const menuStructure = [
-        {
+    const menuStructure = {
+        order: {
             title: ctx.i18n.t('menus.main.order'),
             data: {
                 scene: 'order'
             }
         },
-        {
+        cart: {
             title: ctx.i18n.t('menus.main.cart'),
             data: {
                 scene: 'cart'
             }
         },
-        {
+        about: {
             title: ctx.i18n.t('menus.main.about'),
             data: {
                 scene: 'about'
             }
         },
-        {
+        contacts: {
             title: ctx.i18n.t('menus.main.contacts'),
             data: {
                 scene: 'contacts'
             }
         }
-    ];
+    };
 
     if (!ctx.session.started) {
         await app.start(ctx);
 
         ctx.botScenes.iAmHere(ctx, sceneId);
-        ctx.session.messages.storage = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        ctx.session.messages.storage = await ctx.reply(ctx.i18n.t('scenes.start.welcome'), buildMenu(menuStructure).extra());
     } else {
         await clearScene(ctx);
-        ctx.session.messages.storage = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(ctx, menuStructure).extra());
+        ctx.session.messages.storage = await ctx.editMessageText(ctx.i18n.t('scenes.start.welcome'), buildMenu(menuStructure).extra());
     }
-});
-
-start.enter((ctx: ContextMessageUpdate) => {
-    ctx.session.messages.clearStorage();
 });
 
 export default start;

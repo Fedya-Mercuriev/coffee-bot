@@ -1,9 +1,17 @@
-interface Stack {
-    [key: string]: StackItem;
+interface ReturnedMessage {
+    [key: string]: any;
 }
-interface StackItem {
-    sorted: boolean;
-    operations: Operation[];
+interface SessionStorage {
+    started: boolean;
+    messages: any;
+    scenesMap: string[];
+    order: object;
+    orderInfoMsg: any;
+    menu: object;
+}
+interface BotContext {
+    iAmHere: Function;
+    previousScene: Function;
 }
 interface Operation {
     name: string;
@@ -11,7 +19,7 @@ interface Operation {
     order?: number;
 }
 interface NavigationCallbackData {
-    scene?: string;
+    scene: string;
 }
 interface FunctionInvokingCallbackData {
     cb: string;

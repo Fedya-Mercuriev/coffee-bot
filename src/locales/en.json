@@ -1,10 +1,20 @@
 {
   "scenes": {
     "start": {
-      "welcome": "Bot launched!"
+      "welcome": "You're in main menu!"
     },
-    "menu": {
-      "welcome": "You're now in main menu"
+    "cart": {
+      "content": "This is your cart. All your current orders will be displayed here"
+    },
+    "about": {
+      "content": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. "
+    },
+    "contacts": {
+      "content": "This is a contact section"
+    },
+    "order": {
+      "welcome": "Choose a good you would like to purchase",
+      "orderInfoContent": "Your order info will be displayed here"
     }
   },
   "menus": {
@@ -14,5 +24,8 @@
       "about": "About us",
       "contacts": "Contacts"
     }
+  },
+  "buttons": {
+    "back": "Back"
   }
 }

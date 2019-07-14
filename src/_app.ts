@@ -2,10 +2,12 @@ import { ContextMessageUpdate } from "telegraf";
 import _ from 'lodash';
 
 class App {
-    stack: Stack;
+    sorted: boolean;
+    stack: Operation[];
 
     constructor() {
-        this.stack = {};
+        this.sorted = false;
+        this.stack = [];
     }
 
     // Returns an array of names without any possible junk
@@ -22,32 +24,31 @@ class App {
      * @param name - function name to be invoked
      * @param args - arguments to be passed to the invoked function
      * */
-    call(scene:string, name: string, ...args: any): void {
+    call(name: string, ...args: any): void {
         const normalizedScope = App.normalizeName(name);
 
-        if (!this.stack[scene].sorted) {
-            this.stack[scene].operations.sort((a, b) => {
+        if (!this.sorted) {
+            this.stack.sort((a, b) => {
                 if (a.order === b.order) {
                     return 0;
                 }
                 return (a.order > b.order) ? 1 : -1;
             });
-            this.stack[scene].sorted = true;
+            this.sorted = true;
         }
 
-        this.stack[scene].operations
+        this.stack
             .filter(operation => operation.name === name)
             .map(operation => operation.callback.apply(this, ...args))
     }
 
     // Binds a callback, that'll be accessed by it's name and will be invoked
     /**
-     * @param sceneName - a name of the scene to which the function will be bound
      * @param name - a name of teh function to be bound
      * @param callback - a function itself
      * @param order - an order of invocation (will be used by the start mechanism to determine the invocation order)
      * */
-    bind(sceneName: string, name: string, callback: Function, order?: number): void {
+    bind(name: string, callback: Function, order?: number): void {
         let functionNames: string[] = App.normalizeName(name);
 
         if (_.find(functionNames, name)) {
@@ -58,16 +59,30 @@ class App {
         if (order === undefined) {
             order = 0;
         }
-        this.stack[sceneName].operations.push({ name, callback, order });
+
+        this.stack.push({ name, callback, order });
     }
 
     // Invokes all operations at the start of the app
     start(ctx: ContextMessageUpdate) {
-        if (this.stack.default) {
-            this.stack.default.operations.map(operation => operation.callback.call(ctx));
-        } else {
-            console.warn('No default operations were assigned!');
-        }
+        ctx.session.started = true;
+        ctx.session.messages = {
+            _messages: [],
+            get storage() {
+              return this._messages;
+            },
+            set storage(message: ReturnedMessage) {
+                if (typeof message !== 'boolean') {
+                 const { message_id } = message;
+
+                    if (this._messages.indexOf(message_id) === -1) {
+                        this._messages.push(message_id);
+                    }
+                }
+            }
+
+        };
+        ctx.session.scenesMap = [];
     }
 }
 

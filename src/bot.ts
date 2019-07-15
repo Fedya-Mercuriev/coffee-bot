@@ -24,7 +24,7 @@ const stage = new Stage([
     cart,
     contacts,
     about,
-    order
+    order,
 ]);
 
 bot.use(session());

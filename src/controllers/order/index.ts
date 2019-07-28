@@ -12,10 +12,18 @@ menu.enter(async (ctx: ContextMessageUpdate) => {
 
     if (!ctx.session.order) {
         init(ctx);
-        ctx.session.messages.storage = await displayOrderInfo(ctx);
+        const { message_id } = await displayOrderInfo(ctx);
+        ctx.session.messages.storage = {
+            key: 'orderInfo',
+            message_id
+        };
         await ctx.reply(ctx.i18n.t('scenes.order.welcome'), buildOrderMenu(ctx, menu).extra());
     } else {
-        await displayOrderInfo(ctx);
+        const { message_id } = await displayOrderInfo(ctx);
+        ctx.session.messages.storage = {
+            key: 'orderInfo',
+            message_id
+        };
         await ctx.editMessageText(ctx.i18n.t('scenes.order.welcome'), buildOrderMenu(ctx, menu).extra());
     }
 });

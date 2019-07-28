@@ -1,27 +1,19 @@
 interface ReturnedMessage {
     [key: string]: any;
 }
+interface CustomMessage {
+    [key: string]: number|string
+    key: string,
+    message_id: number
+}
 interface SessionStorage {
+    [key: string] : any;
     started: boolean;
     messages: any;
     scenesMap: string[];
     order: OrderObject;
     orderInfoMsg: string;
     menu: object;
-}
-interface OrderObject {
-    [key: string]: any;
-    drink: string;
-    amount: boolean|Amount;
-    additions: boolean|Addition[];
-}
-interface Amount {
-    title: string;
-    content: number;
-}
-interface Addition {
-    title: string;
-    quantity: number;
 }
 interface BotContext {
     iAmHere: Function;
@@ -39,11 +31,20 @@ interface FunctionInvokingCallbackData {
     cb: string;
     args: string;
 }
-interface OrderData {
-    select: string;
-    value: string;
-}
+/*interface OrderData {
+    order: {
+        select: string;
+        value: string;
+    }
+    scene: string;
+}*/
 interface Menu<T> {
     title: string;
     data: T;
+}
+
+interface OrderMenuItem {
+    title: string;
+    order: string;
+    scene?: string;
 }

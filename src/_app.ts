@@ -1,4 +1,5 @@
 import { ContextMessageUpdate } from "telegraf";
+import generateRandomString from './util/generate-random-string';
 import _ from 'lodash';
 
 class App {
@@ -67,25 +68,39 @@ class App {
     start(ctx: ContextMessageUpdate) {
         ctx.session.started = true;
         ctx.session.messages = {
-            _messages: [],
+            _messages: new Map(),
             get storage() {
               return this._messages;
             },
-            set storage(message: ReturnedMessage|[]) {
-                if (typeof message !== 'boolean' && !_.isArray(message)) {
-                 const { message_id } = message;
+            set storage(message: ReturnedMessage|CustomMessage) {
+                if (typeof message !== 'boolean') {
 
-                    if (this._messages.indexOf(message_id) === -1) {
-                        this._messages.push(message_id);
-                    }
-                } else if (_.isArray(message)) {
-                    this._messages.length = 0;
+                 if (!message.key) {
+                     const { message_id } = message;
+                     let key = generateRandomString(15);
+
+                     // Generate new key for accessing message repeatedly until it's unique
+                     while(this._messages.has(key)) {
+                         key = generateRandomString(15);
+                     }
+
+                     console.log('* Добавили сообщение с рандомной строкой в качестве ключа');
+
+                     this._messages.set(key, message_id);
+                     // This block of code gets executed when a object with a desired key and message id is provided
+                 } else {
+                     const { key, message_id } = message;
+                     this._messages.set(key, message_id);
+                 }
                 } else {
                     return;
                 }
             },
+            hasMessages() {
+                return this._messages.size > 0;
+            },
             clearStorage() {
-                this._messages.length = 0;
+                this._messages.clear();
             }
 
         };

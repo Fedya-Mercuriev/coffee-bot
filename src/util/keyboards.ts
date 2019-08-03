@@ -40,13 +40,19 @@ export function buildOrderMenu(ctx: ContextMessageUpdate, menuItems: any):any {
          Unfortunately telegram only allows 64-bit data, that's why have to
          store object in a separate property
         * */
-        if (ctx.session.currentMenu.has(objectAccessor)) {
-            objectAccessor = generateRandomString(8);
+        if (menuItems[item].scene) {
+            result.push([
+                Markup.callbackButton(title, JSON.stringify(data))
+            ]);
+        } else {
+            while (ctx.session.currentMenu.has(objectAccessor)) {
+                objectAccessor = generateRandomString(8);
+            }
+            ctx.session.currentMenu.set(objectAccessor, data);
+            result.push([
+                Markup.callbackButton(title, JSON.stringify({order: objectAccessor}))
+            ]);
         }
-        ctx.session.currentMenu.set(objectAccessor, data);
-        result.push([
-            Markup.callbackButton(title, JSON.stringify({order: objectAccessor}))
-        ]);
     }
     return Markup.inlineKeyboard(result);
 }

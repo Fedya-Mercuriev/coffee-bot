@@ -19,10 +19,19 @@
   },
   "menus": {
     "main": {
-      "order": "Make an order",
-      "cart": "My Cart",
-      "about": "About us",
-      "contacts": "Contacts"
+      "order": "make an order",
+      "cart": "my cart",
+      "about": "about us",
+      "contacts": "contacts"
+    },
+    "order": {
+      "amer": "Americano",
+      "capp": "Cappuccino",
+      "latt": "Latte",
+      "flat": "Flat White",
+      "raf": "Raf",
+      "peanlatt": "Peanut Latte",
+      "banlatt": "Banana Latte"
     }
   },
   "goods": {

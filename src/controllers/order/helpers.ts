@@ -1,4 +1,5 @@
-import { ContextMessageUpdate } from "telegraf";
+import { ContextMessageUpdate } from 'telegraf';
+import _ from 'lodash';
 
 /**
  * Adds all necessary properties to session when order is started
@@ -7,6 +8,8 @@ import { ContextMessageUpdate } from "telegraf";
 export function init(ctx: ContextMessageUpdate):void {
     ctx.session.order = {
         title: null,
+        /*This property stores values both title for output on screen
+        and value for making adding a drink of specific amount*/
         amount: {
             title: null,
             value: null
@@ -27,21 +30,20 @@ export async function addNavigationToStructure(items: any, scenes: [string, stri
     let result:any = {};
 
     Object.keys(items).forEach((item:string) => {
-        let productObject:any = {order: {}};
+        let productObject:any = {order: <OrderObject>{}};
 
         for (let key in items[item]) {
             if (key === 'title') {
                 productObject[key] = items[item][key];
-            } else {
-                if (key === 'amount') {
-                    if (items[item][key]) {
-                        productObject.scene = scenes[0];
-                    } else {
-                        productObject.scene = scenes[1];
-                    }
+            }
+            if (key === 'amount') {
+                if (items[item][key]) {
+                    productObject.scene = scenes[0];
                 } else {
-                    productObject.order[key] = items[item][key];
+                    productObject.scene = scenes[1];
                 }
+            } else {
+                productObject.order[key] = items[item][key];
             }
         }
         result[item] = productObject;
@@ -66,4 +68,50 @@ export function getAdditionsString(additions:any):string {
 * */
 export function finish(ctx: ContextMessageUpdate):void {
     delete ctx.session.order;
+}
+
+/**
+ * @param ctx - Context message update object
+ * @param orderInfo - an object containing updated orderInfo
+* */
+export async function updateOrderInfoMsg(ctx: ContextMessageUpdate, orderInfo: string) {
+    const editedMessage:ReturnedMessage|boolean = await ctx.telegram.editMessageText(
+        ctx.chat.id,
+        ctx.session.messages.storage.get('orderInfo'),
+        null,
+        orderInfo,
+        {parse_mode: 'HTML'}
+    );
+    if (!_.isBoolean(editedMessage)) {
+        const { message_id } = editedMessage;
+        ctx.session.messages.storage = {
+            key: 'orderInfo',
+            message_id
+        };
+    }
+}
+
+export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise<string> {
+    let messageContent = `Вы выбрали:\n`;
+    let title = ctx.session.order.title;
+    let amount = ctx.session.order.amount;
+    let additions = ctx.session.order.additions;
+
+    if (title) {
+        messageContent += `<b>${_.startCase(title)}</b>`;
+        if (typeof amount === 'object' && !_.every(amount, _.isNull)) {
+            messageContent += `(${amount.title})`
+        }
+        messageContent += '\n';
+    }
+    // Composing additions list
+    if (_.isArray(additions) && additions.length) {
+        let additionsString = '';
+
+        // Adding a title for section
+        messageContent+= `<b>${ctx.i18n.t('orderItems.additions')}</b>\n`;
+        additionsString = getAdditionsString(additions);
+        messageContent += additionsString;
+    }
+    return messageContent;
 }

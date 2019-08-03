@@ -4,10 +4,10 @@ import { updateOrderInfoMsg, composeOrderInfoMessage } from "./helpers";
 
 export async function updateOrderInfo(ctx: ContextMessageUpdate, next: Function) {
     if (ctx.updateType === 'callback_query') {
-        await ctx.answerCbQuery('Обновляю ваш заказ...');
         const args = JSON.parse(ctx.update.callback_query.data);
 
         if (args.order) {
+            await ctx.answerCbQuery('Обновляю ваш заказ...');
             const orderData = await ctx.session.currentMenu.get(args.order);
 
             for (let prop in ctx.session.order) {

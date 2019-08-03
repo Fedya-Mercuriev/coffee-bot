@@ -1,13 +1,18 @@
 import { Markup, ContextMessageUpdate, CallbackButton } from "telegraf";
 import generateRandomString from './generate-random-string';
+import _ from "lodash";
 
 export function buildMenu(options: any ): any {
     let result: Array<CallbackButton>[] = [];
 
     for (let item in options) {
-        result.push([
-            Markup.callbackButton(options[item].title, JSON.stringify(options[item].data))
-        ]);
+        if (options.hasOwnProperty(item)) {
+            let title:string = options[item].title.replace(options[item].title.charAt(0), options[item].title.charAt(0).toUpperCase());
+
+            result.push([
+                Markup.callbackButton(title, JSON.stringify(options[item].data))
+            ]);
+        }
     }
 
     return Markup.inlineKeyboard(result);
@@ -22,10 +27,12 @@ export function buildOrderMenu(ctx: ContextMessageUpdate, menuItems: any):any {
         let title:string = '';
 
         for (let key in menuItems[item]) {
-            if (key === 'title') {
-                title = menuItems[item][key];
-            } else {
-                data[key] = menuItems[item][key];
+            if (menuItems[item].hasOwnProperty(key)) {
+                if (key === 'title') {
+                    title = menuItems[item].title.replace(menuItems[item].title.charAt(0), menuItems[item].title.charAt(0).toUpperCase());
+                } else {
+                    data[key] = menuItems[item][key];
+                }
             }
         }
         /*
@@ -37,7 +44,6 @@ export function buildOrderMenu(ctx: ContextMessageUpdate, menuItems: any):any {
             objectAccessor = generateRandomString(8);
         }
         ctx.session.currentMenu.set(objectAccessor, data);
-        console.log(ctx.session.currentMenu.get(objectAccessor));
         result.push([
             Markup.callbackButton(title, JSON.stringify({order: objectAccessor}))
         ]);

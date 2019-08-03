@@ -23,7 +23,13 @@ order.use(
 
 order.enter(async (ctx: ContextMessageUpdate) => {
     // Process response and add links to scenes depending on whether a drink has different amounts or none
-    const menu = await addNavigationToStructure(dummy, ['order_amount', 'order_additions']);
+    let menu = await addNavigationToStructure(dummy, ['order_amount', 'order_additions']);
+    menu = Object.assign({}, dummy, {
+        back: {
+            title: ctx.i18n.t('buttons.back'),
+            scene: await ctx.botScenes.previousScene(ctx)
+        }
+    });
 
     // Removing messages from previous scene
     await clearScene(ctx);

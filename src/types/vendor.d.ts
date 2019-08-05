@@ -1,3 +1,7 @@
+interface EnumerableObject {
+    [key: string]: any;
+}
+
 interface ReturnedMessage {
     [key: string]: any;
 }

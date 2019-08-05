@@ -84,8 +84,6 @@ class App {
                          key = generateRandomString(15);
                      }
 
-                     console.log('* Добавили сообщение с рандомной строкой в качестве ключа');
-
                      this._messages.set(key, message_id);
                      // This block of code gets executed when a object with a desired key and message id is provided
                  } else {
@@ -105,6 +103,7 @@ class App {
 
         };
         ctx.session.scenesMap = [];
+        ctx.session.currentMenu = new Map();
     }
 }
 

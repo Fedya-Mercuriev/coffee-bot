@@ -1,6 +1,6 @@
 interface OrderObject {
     [key: string]: any;
-    title: string;
+    item: string;
     amount: Amount;
     price: number;
     additions: Addition[];

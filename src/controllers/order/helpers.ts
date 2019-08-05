@@ -7,7 +7,7 @@ import _ from 'lodash';
 * */
 export function init(ctx: ContextMessageUpdate):void {
     ctx.session.order = {
-        title: null,
+        item: null,
         /*This property stores values both title for output on screen
         and value for making adding a drink of specific amount*/
         amount: {
@@ -18,7 +18,6 @@ export function init(ctx: ContextMessageUpdate):void {
         additions: []
     };
     ctx.session.orderInfoMsg = `* ${ctx.i18n.t('scenes.order.orderInfoContent')} *`;
-    ctx.session.currentMenu = new Map();
 }
 
 /**
@@ -30,20 +29,24 @@ export async function addNavigationToStructure(items: any, scenes: [string, stri
     let result:any = {};
 
     Object.keys(items).forEach((item:string) => {
-        let productObject:any = {order: <OrderObject>{}};
+        let productObject:any = {data: {
+                order: <OrderObject>{},
+                scene: null
+            }};
 
         for (let key in items[item]) {
             if (key === 'title') {
-                productObject[key] = items[item][key];
-            }
-            if (key === 'amount') {
+                productObject.title = items[item][key];
+            } else if (key === 'amount') {
                 if (items[item][key]) {
-                    productObject.scene = scenes[0];
+                    productObject.data.scene = scenes[0];
                 } else {
-                    productObject.scene = scenes[1];
+                    productObject.data.scene = scenes[1];
                 }
+            } else if (key === 'scene') {
+                productObject.data.scene = items[item][key];
             } else {
-                productObject.order[key] = items[item][key];
+                productObject.data.order[key] = items[item][key];
             }
         }
         result[item] = productObject;
@@ -93,7 +96,7 @@ export async function updateOrderInfoMsg(ctx: ContextMessageUpdate, orderInfo: s
 
 export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise<string> {
     let messageContent = `Вы выбрали:\n`;
-    let title = ctx.session.order.title;
+    let title = ctx.session.order.item;
     let amount = ctx.session.order.amount;
     let additions = ctx.session.order.additions;
 

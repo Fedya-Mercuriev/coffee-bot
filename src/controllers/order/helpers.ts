@@ -95,10 +95,11 @@ export async function updateOrderInfoMsg(ctx: ContextMessageUpdate, orderInfo: s
 }
 
 export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise<string> {
-    let messageContent = `Вы выбрали:\n`;
-    let title = ctx.session.order.item;
-    let amount = ctx.session.order.amount;
-    let additions = ctx.session.order.additions;
+    let messageContent = `${ctx.i18n.t('scenes.order.orderInfoMsg')}:\n`;
+    let title:string = ctx.session.order.item;
+    let amount:Amount = ctx.session.order.amount;
+    let additions:Addition[] = ctx.session.order.additions;
+    let price:number = ctx.session.order.price;
 
     if (title) {
         messageContent += `<b>${_.startCase(title)}</b>`;
@@ -107,6 +108,7 @@ export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise
         }
         messageContent += '\n';
     }
+
     // Composing additions list
     if (_.isArray(additions) && additions.length) {
         let additionsString = '';
@@ -115,6 +117,10 @@ export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise
         messageContent+= `<b>${ctx.i18n.t('orderItems.additions')}</b>\n`;
         additionsString = getAdditionsString(additions);
         messageContent += additionsString;
+    }
+
+    if (price) {
+        messageContent += `${ctx.i18n.t('scenes.order.totalPrice')}: ${price}₽`;
     }
     return messageContent;
 }

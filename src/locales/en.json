@@ -15,7 +15,8 @@
     "order": {
       "welcome": "Choose a good you would like to purchase",
       "orderInfoContent": "Your order info will be displayed here",
-      "orderInfoMsg": "You chose"
+      "orderInfoMsg": "You chose",
+      "totalPrice": "Total"
     }
   },
   "menus": {

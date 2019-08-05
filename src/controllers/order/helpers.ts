@@ -95,7 +95,7 @@ export async function updateOrderInfoMsg(ctx: ContextMessageUpdate, orderInfo: s
 }
 
 export async function composeOrderInfoMessage(ctx: ContextMessageUpdate):Promise<string> {
-    let messageContent = `Вы выбрали:\n`;
+    let messageContent = `${ctx.i18n.t('scenes.order.orderInfoMsg')}:\n`;
     let title = ctx.session.order.item;
     let amount = ctx.session.order.amount;
     let additions = ctx.session.order.additions;

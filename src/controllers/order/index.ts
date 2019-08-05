@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { ContextMessageUpdate } from 'telegraf';
 import Scene from 'telegraf/scenes/base';
 import Stage from 'telegraf/stage';
-import { buildOrderMenu } from "../../util/keyboards";
+import { buildMenu, addBackButton } from "../../util/keyboards";
 import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { updateOrderInfo } from './middlewares';
@@ -24,12 +24,7 @@ order.use(
 order.enter(async (ctx: ContextMessageUpdate) => {
     // Process response and add links to scenes depending on whether a drink has different amounts or none
     let menu = await addNavigationToStructure(dummy, ['order_amount', 'order_additions']);
-    menu = Object.assign({}, dummy, {
-        back: {
-            title: ctx.i18n.t('buttons.back'),
-            scene: await ctx.botScenes.previousScene(ctx)
-        }
-    });
+    menu = await addBackButton(ctx, menu);
 
     // Removing messages from previous scene
     await clearScene(ctx);
@@ -41,14 +36,14 @@ order.enter(async (ctx: ContextMessageUpdate) => {
             key: 'orderInfo',
             message_id
         };
-        await ctx.reply(ctx.i18n.t('scenes.order.welcome'), buildOrderMenu(ctx, menu).extra());
+        await ctx.reply(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     } else {
         const { message_id } = await displayOrderInfo(ctx);
         ctx.session.messages.storage = {
             key: 'orderInfo',
             message_id
         };
-        await ctx.editMessageText(ctx.i18n.t('scenes.order.welcome'), buildOrderMenu(ctx, menu).extra());
+        await ctx.editMessageText(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     }
 });
 

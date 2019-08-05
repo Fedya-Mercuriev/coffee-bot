@@ -2,45 +2,45 @@
   "americano": {
     "title": "americano",
     "category": "drink",
-    "value": "americano",
+    "item": "americano",
     "amount": true
   },
   "cappuccino": {
     "title": "cappuccino",
     "category": "drink",
-    "value": "cappuccino",
+    "item": "cappuccino",
     "amount": true
   },
   "latte": {
     "title": "latte",
     "category": "drink",
-    "value": "latte",
+    "item": "latte",
     "amount": true
   },
   "flat-white": {
     "title": "flat-white",
     "category": "drink",
-    "value": "flat-white",
+    "item": "flat-white",
     "amount": false,
     "price": 110
   },
   "raf": {
     "title": "raf",
     "category": "drink",
-    "value": "raf",
+    "item": "raf",
     "amount": true
   },
   "peanut-latte": {
     "title": "peanut-latte",
     "category": "drink",
-    "value": "peanut-latte",
+    "item": "peanut-latte",
     "amount": false,
     "price": 150
   },
   "banana-latte": {
     "title": "banana-latte",
     "category": "drink",
-    "value": "banana-latte",
+    "item": "banana-latte",
     "amount": false,
     "price": 130
   }

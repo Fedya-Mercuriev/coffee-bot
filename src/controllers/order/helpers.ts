@@ -53,6 +53,39 @@ export function finish(ctx: ContextMessageUpdate):void {
 }
 
 /**
+ * Processes given object and adds 'scene' property for navigating around desired scenes
+ * @param items - an object of menu items in current menu
+ * @param scenes - an array of scenes to be chosen a scene from
+* */
+export function navigationAdder(items:any, scenes: string[]) {
+    let result:any = {};
+    Object.keys(items).forEach((item:string) => {
+        let productObject:any = {data: {
+                order: <OrderObject>{},
+                scene: null
+            }};
+
+        for (let key in items[item]) {
+            if (key === 'title') {
+                productObject.title = items[item][key];
+            } else if (key === 'amount') {
+                if (items[item][key]) {
+                    productObject.data.scene = scenes[0];
+                } else {
+                    productObject.data.scene = scenes[1];
+                }
+            } else if (key === 'scene') {
+                productObject.data.scene = items[item][key];
+            } else {
+                productObject.data.order[key] = items[item][key];
+            }
+        }
+        result[item] = productObject;
+    });
+    return result;
+}
+
+/**
  * @param ctx - Context message update object
  * @param orderInfo - an object containing updated orderInfo
 * */

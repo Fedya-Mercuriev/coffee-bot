@@ -6,7 +6,7 @@ import { buildMenu, addBackButton } from "../../util/keyboards";
 import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { updateOrderInfo } from './middlewares';
-import { init, finish, addNavigationToStructure } from './helpers';
+import { init, finish, addNavigationToStructure, navigationAdder } from './helpers';
 import displayOrderInfo from '../../util/display-order-info';
 import clearScene from '../../util/clear-scene';
 import dummy from './dummy.json';
@@ -22,35 +22,9 @@ order.use(
 );
 
 order.enter(async (ctx: ContextMessageUpdate) => {
-    function callback(items:any, scenes: string[]) {
-        let result:any = {};
-        Object.keys(items).forEach((item:string) => {
-            let productObject:any = {data: {
-                    order: <OrderObject>{},
-                    scene: null
-                }};
 
-            for (let key in items[item]) {
-                if (key === 'title') {
-                    productObject.title = items[item][key];
-                } else if (key === 'amount') {
-                    if (items[item][key]) {
-                        productObject.data.scene = scenes[0];
-                    } else {
-                        productObject.data.scene = scenes[1];
-                    }
-                } else if (key === 'scene') {
-                    productObject.data.scene = items[item][key];
-                } else {
-                    productObject.data.order[key] = items[item][key];
-                }
-            }
-            result[item] = productObject;
-        });
-        return result;
-    }
     // Process response and add links to scenes depending on whether a drink has different amounts or none
-    let menu = await addNavigationToStructure(callback, dummy, ['order_amount', 'order_additions']);
+    let menu = await addNavigationToStructure(navigationAdder, dummy, ['order_amount', 'order_additions']);
     menu = await addBackButton(ctx, menu);
 
     // Removing messages from previous scene

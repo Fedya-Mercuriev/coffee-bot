@@ -1,0 +1,106 @@
+{
+  "americano": {
+    "small": {
+      "title": "small",
+      "amount": {
+        "item": "small",
+        "value": "small"
+      },
+      "price": 90
+    },
+    "middle": {
+      "title": "middle",
+      "amount": {
+        "item": "middle",
+        "value": "middle"
+      },
+      "price": 110
+    },
+    "big": {
+      "title": "big",
+      "amount": {
+        "item": "big",
+        "value": "big"
+      },
+      "price": 150
+    }
+  },
+  "cappuccino": {
+    "small": {
+      "title": "small",
+      "amount": {
+        "item": "small",
+        "value": "small"
+      },
+      "price": 90
+    },
+    "middle": {
+      "title": "middle",
+      "amount": {
+        "item": "middle",
+        "value": "middle"
+      },
+      "price": 110
+    },
+    "big": {
+      "title": "big",
+      "amount": {
+        "item": "big",
+        "value": "big"
+      },
+      "price": 150
+    }
+  },
+  "latte": {
+    "small": {
+      "title": "small",
+      "amount": {
+        "item": "small",
+        "value": "small"
+      },
+      "price": 90
+    },
+    "middle": {
+      "title": "middle",
+      "amount": {
+        "item": "middle",
+        "value": "middle"
+      },
+      "price": 110
+    },
+    "big": {
+      "title": "big",
+      "amount": {
+        "item": "big",
+        "value": "big"
+      },
+      "price": 150
+    }
+  },
+  "raf": {
+    "small": {
+      "title": "small",
+      "amount": {
+        "item": "small",
+        "value": "small"
+      },
+      "price": 90
+    },
+    "middle": {
+      "title": "middle",
+      "amount": {
+        "item": "middle",
+        "value": "middle"
+      },
+      "price": 110
+    },
+    "big": {
+      "title": "big",
+      "amount": {
+        "item": "big",
+        "value": "big"
+      },
+      "price": 150
+    }
+  }
+}

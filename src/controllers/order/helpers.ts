@@ -22,36 +22,15 @@ export function init(ctx: ContextMessageUpdate):void {
 
 /**
  Adds links to scenes from the provided array depending on value of a desired property
+ * @param callback - a passed callback function that adds scenes
  * @param items - an object of assumed menu items
  * @param scenes - an array of scenes (next(the scene that can be skipped) and the one after the next scene)
 * */
-export async function addNavigationToStructure(items: any, scenes: [string, string]):Promise<any> {
+export async function addNavigationToStructure(callback: Function, items: any, scenes: string[]):Promise<any> {
     let result:any = {};
+    const args = Array.prototype.slice.call(arguments, 1);
 
-    Object.keys(items).forEach((item:string) => {
-        let productObject:any = {data: {
-                order: <OrderObject>{},
-                scene: null
-            }};
-
-        for (let key in items[item]) {
-            if (key === 'title') {
-                productObject.title = items[item][key];
-            } else if (key === 'amount') {
-                if (items[item][key]) {
-                    productObject.data.scene = scenes[0];
-                } else {
-                    productObject.data.scene = scenes[1];
-                }
-            } else if (key === 'scene') {
-                productObject.data.scene = items[item][key];
-            } else {
-                productObject.data.order[key] = items[item][key];
-            }
-        }
-        result[item] = productObject;
-    });
-
+    result = callback.apply(this, args);
     return result;
 }
 

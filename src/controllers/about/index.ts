@@ -25,7 +25,7 @@ about.enter(async (ctx: ContextMessageUpdate) => {
     };
 
     ctx.session.messages.clearStorage();
-    await ctx.editMessageText(ctx.i18n.t('scenes.about.content'), buildMenu(menuStructure).extra());
+    await ctx.editMessageText(ctx.i18n.t('scenes.about.content'), buildMenu(ctx, menuStructure).extra());
 });
 
 export default about;

@@ -9,6 +9,7 @@ import cart from './controllers/cart/index';
 import contacts from './controllers/contacts/index';
 import about from './controllers/about/index';
 import order from './controllers/order/index';
+import amount from './controllers/order_amount/index';
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
@@ -25,6 +26,7 @@ const stage = new Stage([
     contacts,
     about,
     order,
+    amount
 ]);
 
 bot.use(session());

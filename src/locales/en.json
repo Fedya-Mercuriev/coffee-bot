@@ -69,5 +69,8 @@
   },
   "buttons": {
     "back": "Back"
+  },
+  "status": {
+    "update_order": "Updating your order"
   }
 }

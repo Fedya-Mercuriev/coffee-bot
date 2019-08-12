@@ -7,7 +7,7 @@ export async function updateOrderInfo(ctx: ContextMessageUpdate, next: Function)
         const args = ctx.session.currentMenu.get(ctx.update.callback_query.data);
 
         if (args.order) {
-            await ctx.answerCbQuery('Обновляю ваш заказ...');
+            await ctx.answerCbQuery(`${ctx.i18n.t('status.update_order')}...`);
 
             for (let prop in ctx.session.order) {
                 if (ctx.session.order.hasOwnProperty(prop) && args.order[prop]) {

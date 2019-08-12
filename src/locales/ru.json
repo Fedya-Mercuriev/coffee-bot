@@ -69,5 +69,8 @@
   },
   "buttons": {
     "back": "Назад"
+  },
+  "status": {
+    "update_order": "Обновляю ваш заказ"
   }
 }

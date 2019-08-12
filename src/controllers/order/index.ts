@@ -27,10 +27,10 @@ order.enter(async (ctx: ContextMessageUpdate) => {
     let menu = await addNavigationToStructure(navigationAdder, dummy, ['order_amount', 'order_additions']);
     menu = await addBackButton(ctx, menu);
 
-    // Removing messages from previous scene
-    await clearScene(ctx);
-
     if (!ctx.session.order) {
+        // Removing messages from previous scene
+        await clearScene(ctx);
+
         init(ctx);
         const { message_id } = await displayOrderInfo(ctx);
         ctx.session.messages.storage = {
@@ -39,11 +39,13 @@ order.enter(async (ctx: ContextMessageUpdate) => {
         };
         await ctx.reply(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     } else {
-        const { message_id } = await displayOrderInfo(ctx);
-        ctx.session.messages.storage = {
-            key: 'orderInfo',
-            message_id
-        };
+        if (!ctx.session.orderInfoMsg) {
+            const { message_id } = await displayOrderInfo(ctx);
+            ctx.session.messages.storage = {
+                key: 'orderInfo',
+                message_id
+            };
+        }
         await ctx.editMessageText(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     }
 });

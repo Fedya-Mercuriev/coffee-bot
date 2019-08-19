@@ -4,12 +4,12 @@ import Telegraf, { ContextMessageUpdate, Extra, Markup } from 'telegraf';
 import TelegrafI18n, { match } from 'telegraf-i18n';
 import Stage from 'telegraf/stage';
 import session from 'telegraf/session';
-import start from './controllers/start/index';
-import cart from './controllers/cart/index';
-import contacts from './controllers/contacts/index';
-import about from './controllers/about/index';
-import order from './controllers/order/index';
-import amount from './controllers/order_amount/index';
+import start from './controllers/start';
+import cart from './controllers/cart';
+import contacts from './controllers/contacts';
+import about from './controllers/about';
+import order from './controllers/order';
+import amount from './controllers/order_amount';
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',

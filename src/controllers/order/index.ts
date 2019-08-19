@@ -5,8 +5,8 @@ import Stage from 'telegraf/stage';
 import { buildMenu, addBackButton } from "../../util/keyboards";
 import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
-import { updateOrderInfo } from './middlewares';
-import { init, finish, addNavigationToStructure, navigationAdder } from './helpers';
+import { updateOrderInfo, returnToMainMenu } from './middlewares';
+import { init, addNavigationToStructure, navigationAdder } from './helpers';
 import displayOrderInfo from '../../util/display-order-info';
 import clearScene from '../../util/clear-scene';
 import dummy from './dummy.json';
@@ -16,6 +16,7 @@ const { leave } = Stage;
 const order = new Scene(sceneId);
 
 order.use(
+    returnToMainMenu,
     updateOrderInfo,
     navigateScene,
     invokeFunction
@@ -39,22 +40,8 @@ order.enter(async (ctx: ContextMessageUpdate) => {
         };
         await ctx.reply(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     } else {
-        if (!ctx.session.orderInfoMsg) {
-            const { message_id } = await displayOrderInfo(ctx);
-            ctx.session.messages.storage = {
-                key: 'orderInfo',
-                message_id
-            };
-        }
         await ctx.editMessageText(ctx.i18n.t('scenes.order.welcome'), buildMenu(ctx, menu).extra());
     }
-});
-
-order.action('back', (ctx: ContextMessageUpdate) => {
-    if (_.some(ctx.session.order, _.isEmpty)) {
-        finish(ctx);
-    }
-    ctx.session.currentMenu.clear();
 });
 
 export default order;

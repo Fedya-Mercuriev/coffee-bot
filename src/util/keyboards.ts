@@ -24,11 +24,13 @@ export function buildMenu(ctx: ContextMessageUpdate, options: any): any {
 }
 
 export async function addBackButton(ctx: ContextMessageUpdate, menu: any): Promise<EnumerableObject> {
+    const previousScene = await ctx.botScenes.previousScene(ctx);
+
     return Object.assign({}, menu, {
         back: {
             title: ctx.i18n.t('buttons.back'),
             data: {
-                scene: await ctx.botScenes.previousScene(ctx)
+                scene: previousScene
             }
         }
     });

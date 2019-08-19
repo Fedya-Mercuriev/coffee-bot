@@ -46,7 +46,7 @@ bot.context.botScenes = {
         if (ctx.session.scenesMap.indexOf(sceneName) === -1) {
           ctx.session.scenesMap.push(sceneName);
         } else {
-          ctx.session.scenesMap = (sceneIndex) ? ctx.session.scenesMap.slice(0, sceneIndex) : [ctx.session.scenesMap[0]];
+          ctx.session.scenesMap = (sceneIndex) ? ctx.session.scenesMap.slice(0, sceneIndex + 1) : [ctx.session.scenesMap[0]];
         }
     },
     /**
@@ -54,7 +54,11 @@ bot.context.botScenes = {
     * @param ctx - Message update object
     * */
     previousScene: async (ctx: ContextMessageUpdate): Promise<string> => {
-        return ctx.session.scenesMap[ctx.session.scenesMap.length - 2]
+        if (ctx.session.scenesMap.length > 1) {
+            return ctx.session.scenesMap[ctx.session.scenesMap.length - 2];
+        } else {
+            return ctx.session.scenesMap[0];
+        }
     }
 };
 

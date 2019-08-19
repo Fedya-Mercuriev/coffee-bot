@@ -1,5 +1,6 @@
 import { ContextMessageUpdate } from 'telegraf';
 import _ from 'lodash';
+import clearScene from '../../util/clear-scene';
 
 /**
  * Adds all necessary properties to session when order is started
@@ -48,8 +49,10 @@ export function getAdditionsString(additions:any):string {
  * Deletes an object with properties necessary for order processing
  * @param ctx - context message update object
 * */
-export function finish(ctx: ContextMessageUpdate):void {
+export async function finish(ctx: ContextMessageUpdate):Promise<void> {
     delete ctx.session.order;
+    await clearScene(ctx);
+    ctx.session.messages.clearStorage();
 }
 
 /**
@@ -90,13 +93,19 @@ export function navigationAdder(items:any, scenes: string[]) {
  * @param orderInfo - an object containing updated orderInfo
 * */
 export async function updateOrderInfoMsg(ctx: ContextMessageUpdate, orderInfo: string) {
-    const editedMessage:ReturnedMessage|boolean = await ctx.telegram.editMessageText(
-        ctx.chat.id,
-        ctx.session.messages.storage.get('orderInfo'),
-        null,
-        orderInfo,
-        {parse_mode: 'HTML'}
-    );
+    let editedMessage:ReturnedMessage|boolean = null;
+
+    try {
+        editedMessage = await ctx.telegram.editMessageText(
+            ctx.chat.id,
+            ctx.session.messages.storage.get('orderInfo'),
+            null,
+            orderInfo,
+            {parse_mode: 'HTML'}
+        );
+    } catch(e) {
+        return;
+    }
     if (!_.isBoolean(editedMessage)) {
         const { message_id } = editedMessage;
         ctx.session.messages.storage = {

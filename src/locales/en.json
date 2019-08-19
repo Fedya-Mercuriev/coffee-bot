@@ -71,6 +71,7 @@
     "back": "Back"
   },
   "status": {
+    "return_main_menu": "Returning to main menu",
     "update_order": "Updating your order"
   }
 }

@@ -7,14 +7,14 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "..",
     "resolveJsonModule": true,
     "lib": ["es2017"],
     "paths": {
-      "*": ["node_modules/*", "frontend/types/*"]
+      "*": ["node_modules/*", "./types/*"]
     }
   },
-  "include": ["frontend/**/*",
-    "frontend/locales/*.json"
+  "include": ["./**/*",
+    "./locales/*.json"
   ]
 }

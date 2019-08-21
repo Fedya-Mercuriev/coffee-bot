@@ -1,7 +1,7 @@
 import { ContextMessageUpdate } from 'telegraf';
 import Stage from 'telegraf/stage';
 import Scene from 'telegraf/scenes/base';
-import app from '../../_app';
+import app from '../../../_app';
 import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { buildMenu } from '../../util/keyboards';

@@ -13,4 +13,4 @@ module.exports = {
         'prettier/prettier': ['error', { singleQuote: true }]
     },
     plugins: ['prettier']
-};
+}

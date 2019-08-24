@@ -2,7 +2,7 @@ import { ContextMessageUpdate } from 'telegraf';
 import Stage from 'telegraf/stage';
 import Scene from 'telegraf/scenes/base';
 import navigateToScene from '../../middlewares/navigate-scene';
-import invokeFunction from '../../middlewares/invoke-function';
+// import invokeFunction from '../../middlewares/invoke-function';
 import { buildMenu } from '../../util/keyboards'
 
 const sceneId = 'about';
@@ -11,7 +11,7 @@ const about = new Scene(sceneId);
 
 about.use(
     navigateToScene,
-    invokeFunction
+    // invokeFunction
 );
 
 about.enter(async (ctx: ContextMessageUpdate) => {

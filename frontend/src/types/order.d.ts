@@ -1,16 +1,13 @@
+import { Good } from './good';
+import { Additive } from './additive';
+import { GoodVolume } from './good-volume';
+
 interface OrderObject {
-    [key: string]: any;
-    item: string;
-    amount: Amount;
-    price: number;
-    additions: Addition[];
+  [key: string]: any;
+  items: Map<string, OrderItem>;
 }
-interface Amount {
-    title: string;
-    value: number;
-}
-interface Addition {
-    id: number;
-    title: string;
-    price: number;
+interface OrderItem {
+  good: Good;
+  volume: GoodVolume;
+  additives: Map<string, { item: Additive; quantity: number }>;
 }

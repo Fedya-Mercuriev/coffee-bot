@@ -15,6 +15,6 @@
     }
   },
   "include": ["./**/*",
-    "./locales/*.json"
+    "src/locales/*.json"
   ]
 }

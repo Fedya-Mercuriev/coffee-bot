@@ -7,6 +7,7 @@ interface OrderObject {
   items: Map<string, OrderItem>;
 }
 interface OrderItem {
+  [key: string]: any;
   good: Good;
   volume: GoodVolume;
   additives: Map<string, { item: Additive; quantity: number }>;

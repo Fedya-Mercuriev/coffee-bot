@@ -1,5 +1,5 @@
 import { ContextMessageUpdate } from "telegraf";
-import generateRandomString from './src/util/generate-random-string';
+import generateRandomString from './util/generate-random-string';
 import _ from 'lodash';
 
 class App {

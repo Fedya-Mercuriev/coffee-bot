@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "lib": ["es2017"],
     "paths": {
-      "*": ["node_modules/*", "./types/*"]
+      "*": ["node_modules/*", "src/types/*"]
     }
   },
   "include": ["./**/*",

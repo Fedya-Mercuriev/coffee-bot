@@ -80,6 +80,7 @@ export function navigationAdder(items: any, scenes: string[]) {
   let result: any = {};
   Object.keys(items).forEach((item: string) => {
     let productObject: ProductObject = {
+      name: null,
       data: {
         order: {
           name: null,
@@ -95,6 +96,7 @@ export function navigationAdder(items: any, scenes: string[]) {
     for (let key in items[item]) {
       const { name, description, volume, price, good_type_id } = items[item];
 
+      productObject.name = name;
       productObject.data.order.name = name;
       productObject.data.order.description = description;
       productObject.data.order.price = price;

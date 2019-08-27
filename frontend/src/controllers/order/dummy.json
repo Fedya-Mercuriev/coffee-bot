@@ -1,47 +1,51 @@
 {
   "americano": {
-    "title": "americano",
-    "category": "drink",
-    "item": "americano",
-    "amount": true
+    "name": "americano",
+    "description": "Сделанные на базе интернет-аналитики выводы набирают популярность среди определенных слоев населения, а значит, должны быть преданы социально-демократической анафеме. В рамках спецификации современных стандартов, активно развивающиеся страны третьего мира неоднозначны и будут подвергнуты целой серии независимых исследований.",
+    "volume": true,
+    "price": null,
+    "good_type_id": 1
   },
   "cappuccino": {
-    "title": "cappuccino",
-    "category": "drink",
-    "item": "cappuccino",
-    "amount": true
+    "name": "cappuccino",
+    "description": null,
+    "volume": true,
+    "price": null,
+    "good_type_id": 1
   },
   "latte": {
-    "title": "latte",
-    "category": "drink",
-    "item": "latte",
-    "amount": true
+    "name": "latte",
+    "description": null,
+    "volume": true,
+    "price": null,
+    "good_type_id": 1
   },
   "flat-white": {
-    "title": "flat-white",
-    "category": "drink",
-    "item": "flat-white",
-    "amount": false,
-    "price": 110
+    "name": "flat-white",
+    "description": "Сделанные на базе интернет-аналитики выводы набирают популярность среди определенных слоев населения, а значит, должны быть преданы социально-демократической анафеме. В рамках спецификации современных стандартов, активно развивающиеся страны третьего мира неоднозначны и будут подвергнуты целой серии независимых исследований.",
+    "volume": false,
+    "price": 110,
+    "good_type_id": 1
   },
   "raf": {
-    "title": "raf",
-    "category": "drink",
-    "item": "raf",
-    "amount": true
+    "name": "raf",
+    "description": null,
+    "volume": true,
+    "price": null,
+    "good_type_id": 1
   },
   "peanut-latte": {
-    "title": "peanut-latte",
-    "category": "drink",
-    "item": "peanut-latte",
-    "amount": false,
-    "price": 150
+    "name": "peanut-latte",
+    "description": "Сделанные на базе интернет-аналитики выводы набирают популярность среди определенных слоев населения, а значит, должны быть преданы социально-демократической анафеме. В рамках спецификации современных стандартов, активно развивающиеся страны третьего мира неоднозначны и будут подвергнуты целой серии независимых исследований.",
+    "volume": false,
+    "price": 150,
+    "good_type_id": 1
   },
   "banana-latte": {
-    "title": "banana-latte",
-    "category": "drink",
-    "item": "banana-latte",
-    "amount": false,
-    "price": 130
+    "name": "banana-latte",
+    "description": "Сделанные на базе интернет-аналитики выводы набирают популярность среди определенных слоев населения, а значит, должны быть преданы социально-демократической анафеме. В рамках спецификации современных стандартов, активно развивающиеся страны третьего мира неоднозначны и будут подвергнуты целой серии независимых исследований.",
+    "volume": false,
+    "price": 130,
+    "good_type_id": 1
   }
 }

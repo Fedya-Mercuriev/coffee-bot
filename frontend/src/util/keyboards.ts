@@ -1,16 +1,21 @@
 import { Markup, ContextMessageUpdate, CallbackButton } from 'telegraf';
 import { EnumerableObject } from 'vendor';
 import generateRandomString from './generate-random-string';
+import extractProps from './extract-props-from-object'
 import _ from 'lodash';
 
-function composeCallbackData(ctx: ContextMessageUpdate, menuItems: any): any {
+function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
   let objectAccessor: string = generateRandomString(8);
-  let data: any = {};
+  let data: EnumerableObject = {};
 
-  for (let key in menuItems) {
-    if (menuItems.hasOwnProperty(key)) {
+  for (let key in items) {
+    if (items.hasOwnProperty(key)) {
       if (key !== 'name') {
-        data[key] = menuItems[key];
+        if (_.isPlainObject(items[key])) {
+          extractProps(items[key], data);
+        } else {
+          data[key] = items[key];
+        }
       }
     }
   }
@@ -42,7 +47,7 @@ export function buildMenu(
         options[item].name.charAt(0),
         options[item].name.charAt(0).toUpperCase()
       );
-      const data: any = composeCallbackData(ctx, options[item].data);
+      const data: any = composeCallbackData(ctx, options[item]);
 
       result.push([Markup.callbackButton(name, data)]);
     }

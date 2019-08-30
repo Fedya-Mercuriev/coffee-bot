@@ -1,6 +1,7 @@
 import { ContextMessageUpdate } from "telegraf";
 import generateRandomString from './util/generate-random-string';
 import _ from 'lodash';
+import { ReturnedMessage, CustomMessage, Operation } from 'vendor';
 
 class App {
     sorted: boolean;

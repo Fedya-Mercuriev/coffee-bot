@@ -11,6 +11,7 @@ import addNavigationToStructure from '../../util/add-navigation-to-structure';
 import displayOrderInfo from '../../util/display-order-info';
 import clearScene from '../../util/clear-scene';
 import dummy from './dummy.json';
+import MenuStructure from '../../util/prepare-menu-structure';
 
 const sceneId = 'order';
 const { leave } = Stage;
@@ -20,11 +21,17 @@ order.use(returnToMainMenu, updateOrderInfo, navigateScene, invokeFunction);
 
 order.enter(async (ctx: ContextMessageUpdate) => {
   // Process response and add links to scenes depending on whether a drink has different amounts or none
-  let menu = await addNavigationToStructure(navigationAdder, dummy, [
+  /*let menu = await addNavigationToStructure(navigationAdder, dummy, [
     'order_amount',
     'order_additions'
-  ]);
-  menu = await addBackButton(ctx, menu);
+  ]);*/
+  const menu = new MenuStructure(dummy)
+    .processStructure(addNavigationToStructure, navigationAdder, dummy, [
+      'order_amount',
+      'order_additions'
+    ])
+    .processStructure(addBackButton, ctx).menu;
+  // menu = await addBackButton(ctx, menu);
 
   if (!ctx.session.order) {
     // Removing messages from previous scene

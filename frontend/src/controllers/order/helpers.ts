@@ -96,7 +96,8 @@ export function navigationAdder(items: any, scenes: string[]): any {
     }
     result[item] = productObject;
   });
-  return result;
+  if (!this.structure) return;
+  this.structure = result;
 }
 
 /**

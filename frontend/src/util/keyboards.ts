@@ -1,11 +1,19 @@
 import { Markup, ContextMessageUpdate, CallbackButton } from 'telegraf';
 import { EnumerableObject } from 'vendor';
 import generateRandomString from './generate-random-string';
-import extractProps from './extract-props-from-object'
+import extractProps from './extract-props-from-object';
 import _ from 'lodash';
 
 function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
-  let objectAccessor: string = generateRandomString(8);
+  /*
+     Object accessor is used to get an object with all necessary data
+     Unfortunately telegram only allows 64-bit data, that's why have to
+     store object in a separate property
+  */
+  const objectAccessor: string = generateRandomString(
+    8,
+    ctx.session.currentMenu
+  );
   let data: EnumerableObject = {};
 
   for (let key in items) {
@@ -18,14 +26,6 @@ function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
         }
       }
     }
-  }
-  /*
-     Object accessor is used to get an object with all necessary data
-     Unfortunately telegram only allows 64-bit data, that's why have to
-     store object in a separate property
-    * */
-  while (ctx.session.currentMenu.has(objectAccessor)) {
-    objectAccessor = generateRandomString(8);
   }
   ctx.session.currentMenu.set(objectAccessor, data);
   return objectAccessor;

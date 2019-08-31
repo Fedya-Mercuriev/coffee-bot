@@ -1,12 +1,23 @@
+import _ from 'lodash';
 import { ContextMessageUpdate } from 'telegraf';
 import { ReturnedMessage } from 'vendor';
 import { ProductObject } from 'product-object';
 import { GoodVolume } from 'good-volume';
 import { Good } from 'good';
 import { Additive } from 'additive';
-import _ from 'lodash';
 import clearScene from '../../util/clear-scene';
 import generateRandomString from '../../util/generate-random-string';
+
+// Adds a cell where info about current order will be stored
+export function addOrderItem(ctx: ContextMessageUpdate): void {
+  let itemKey: string = generateRandomString(10);
+  ctx.session.currentOrderKey = itemKey;
+  ctx.session.order.items.set(ctx.session.currentOrderKey, {
+    good: null,
+    volume: null,
+    additives: null
+  });
+}
 
 /**
  * Adds all necessary properties to session when order is started
@@ -21,34 +32,9 @@ export function init(ctx: ContextMessageUpdate): void {
   ctx.session.orderInfoMsg = `* ${ctx.i18n.t(
     'scenes.order.orderInfoContent'
   )} *`;
-}
-// Adds a cell ehere info about current order will be stored
-export async function addOrderItem(ctx: ContextMessageUpdate): Promise<any> {
-  const itemKey = generateRandomString(10);
-  ctx.session.currentOrderKey = itemKey;
-  ctx.session.order.items.set(ctx.session.currentOrderKey, {
-    good: null,
-    volume: null,
-    additives: null
-  });
-}
-
-/**
- Adds links to scenes from the provided array depending on value of a desired property
- * @param callback - a passed callback function that adds scenes
- * @param items - an object of assumed menu items
- * @param scenes - an array of scenes (next(the scene that can be skipped) and the one after the next scene)
-* */
-export async function addNavigationToStructure(
-  callback: Function,
-  items: any,
-  scenes: string[]
-): Promise<any> {
-  let result: any = {};
-  const args = Array.prototype.slice.call(arguments, 1);
-
-  result = callback.apply(this, args);
-  return result;
+  if (!ctx.session.order.items.size) {
+    addOrderItem(ctx);
+  }
 }
 
 /**
@@ -76,7 +62,7 @@ export async function finish(ctx: ContextMessageUpdate): Promise<void> {
  * @param items - an object of menu items in current menu
  * @param scenes - an array of scenes to be chosen a scene from
  * */
-export function navigationAdder(items: any, scenes: string[]) {
+export function navigationAdder(items: any, scenes: string[]): any {
   let result: any = {};
   Object.keys(items).forEach((item: string) => {
     let productObject: ProductObject = {

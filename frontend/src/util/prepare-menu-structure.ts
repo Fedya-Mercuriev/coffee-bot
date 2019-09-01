@@ -5,7 +5,10 @@ export default class MenuStructure {
   constructor(json: any) {
     this.structure = JSON.parse(JSON.stringify(json));
   }
-  get menu(): EnumerableObject {
+  get menu() {
+    return this.structure;
+  }
+  getMenuStructure(): EnumerableObject {
     return this.structure;
   }
   processStructure(callback: Function, ...args: any[]): this {

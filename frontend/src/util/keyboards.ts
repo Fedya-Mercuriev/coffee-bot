@@ -20,7 +20,7 @@ function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
     if (items.hasOwnProperty(key)) {
       if (key !== 'name') {
         if (_.isPlainObject(items[key])) {
-          extractProps(items[key], data);
+          data = extractProps(items[key]);
         } else {
           data[key] = items[key];
         }
@@ -61,7 +61,7 @@ export async function addBackButton(
 ): Promise<EnumerableObject> {
   const previousScene = await ctx.botScenes.previousScene(ctx);
 
-  return Object.assign(this.menu, {
+  return Object.assign(this.getMenuStructure(), {
     back: {
       name: ctx.i18n.t('buttons.back'),
       data: {

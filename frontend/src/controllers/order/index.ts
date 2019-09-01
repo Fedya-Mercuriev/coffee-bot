@@ -21,17 +21,13 @@ order.use(returnToMainMenu, updateOrderInfo, navigateScene, invokeFunction);
 
 order.enter(async (ctx: ContextMessageUpdate) => {
   // Process response and add links to scenes depending on whether a drink has different amounts or none
-  /*let menu = await addNavigationToStructure(navigationAdder, dummy, [
-    'order_amount',
-    'order_additions'
-  ]);*/
   const menu = new MenuStructure(dummy)
     .processStructure(addNavigationToStructure, navigationAdder, dummy, [
       'order_amount',
       'order_additions'
     ])
-    .processStructure(addBackButton, ctx).menu;
-  // menu = await addBackButton(ctx, menu);
+    .processStructure(addBackButton, ctx)
+    .getMenuStructure();
 
   if (!ctx.session.order) {
     // Removing messages from previous scene

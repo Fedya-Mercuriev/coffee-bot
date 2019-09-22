@@ -37,23 +37,38 @@ function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
  * */
 export function buildMenu(
   ctx: ContextMessageUpdate,
-  options: EnumerableObject
+  options: any[][]
 ): any {
   let result: CallbackButton[][] = [];
-
-  for (let item in options) {
+  options.forEach((row) => {
+    const currentRow = row.map((button: EnumerableObject) => {
+      const name: string = button.name.replace(
+        button.name.charAt(0),
+        button.name.charAt(0).toUpperCase()
+      );
+      const data: string = composeCallbackData(ctx, button);
+      return Markup.callbackButton(name, data);
+    });
+    result.push(currentRow);
+  });
+  /*for (let item in options) {
     if (options.hasOwnProperty(item)) {
+      const currentButton = [];
       const name: string = options[item].name.replace(
         options[item].name.charAt(0),
         options[item].name.charAt(0).toUpperCase()
       );
       const data: any = composeCallbackData(ctx, options[item]);
 
-      result.push([Markup.callbackButton(name, data)]);
+      currentButton.push([Markup.callbackButton(name, data)]);
     }
-  }
+  }*/
 
-  return Markup.inlineKeyboard(result);
+  return Markup.inlineKeyboard(result, {
+    wrap: (btn, index, currentRow) => {
+      console.log(currentRow);
+    }
+  });
 }
 
 export async function addBackButton(

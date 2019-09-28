@@ -6,6 +6,7 @@ import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { buildMenu } from '../../util/keyboards';
 import clearScene from '../../util/clear-scene';
+import addLocaleToMenu from '../../util/add-locale';
 import MenuStructure from '../../util/prepare-menu-structure';
 
 const sceneId = 'start';
@@ -42,7 +43,9 @@ start.enter(
         }
       }
     };
-    menuStructure = new MenuStructure(menuStructure);
+    menuStructure = new MenuStructure(
+      JSON.stringify(menuStructure)
+    ).processButtons(addLocaleToMenu, ctx, 'main');
 
     if (!ctx.session.started) {
       await app.start(ctx);

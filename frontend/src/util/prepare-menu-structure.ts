@@ -1,31 +1,55 @@
 import _ from 'lodash';
-import { EnumerableObject } from 'vendor';
 import MenuButton from 'menu-button';
+import { ContextMessageUpdate } from 'telegraf';
 
 export default class MenuStructure {
-  private menuItems: MenuButton[][] | MenuButton[];
-  public constructor(json: any) {
-    this.menuItems = this._prepareRows(JSON.parse(JSON.stringify(json)));
+  public menuItems: MenuButton[][] | MenuButton[];
+  public constructor(data: any) {
+    this.menuItems = this._prepareRows(JSON.parse(data));
   }
-  public get menu(): EnumerableObject {
+  public get menu(): MenuButton[][] | MenuButton[] {
     return this.menuItems;
   }
-  public getMenuStructure(): EnumerableObject {
-    return this.menuItems;
-  }
-  private _prepareRows(menuDataObject: { [key: string]: any }): any[] {
+  private _prepareRows(menuData: { [key: string]: any } | any[]): any[] {
     let result: any[] = [];
-    Object.keys(menuDataObject).forEach(item => {
-      const currentMenuItem = menuDataObject[item];
-      result.push([currentMenuItem]);
+    if (!Array.isArray(menuData)) {
+      menuData = _.values(menuData);
+    }
+    menuData.forEach((item: object) => {
+      result.push([item]);
     });
     return result;
   }
   public processButtons(callback: Function, ...args: any[]): this {
-    this.menuItems.forEach((item: any) => {
-      const cbArgs: any[] = [item].concat(args);
-      callback(...cbArgs);
+    this.menuItems.forEach((buttons: any) => {
+      if (buttons.length > 1) {
+        buttons.forEach((button: any) => {
+          const cbArgs: any[] = [button].concat(args);
+          callback(...cbArgs);
+        });
+      } else {
+        const cbArgs: any[] = [buttons[0]].concat(args);
+        callback(...cbArgs);
+      }
     });
+    return this;
+  }
+  public addBackButton(ctx: ContextMessageUpdate): this {
+    ctx.botScenes
+      .previousScene(ctx)
+      .then((previousScene: string) => {
+        this.menuItems.push([
+          {
+            name: ctx.i18n.t('buttons.back'),
+            data: {
+              scene: previousScene
+            }
+          }
+        ]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     return this;
   }
 }

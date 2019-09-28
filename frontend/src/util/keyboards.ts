@@ -4,11 +4,11 @@ import generateRandomString from './generate-random-string';
 import extractProps from './extract-props-from-object';
 import _ from 'lodash';
 
-function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
+function composeCallbackData(ctx: ContextMessageUpdate, items: any): string {
   /*
      Object accessor is used to get an object with all necessary data
      Unfortunately telegram only allows 64-bit data, that's why have to
-     store object in a separate property
+     store object in a separate 'virtual' menu
   */
   const objectAccessor: string = generateRandomString(
     8,
@@ -35,12 +35,9 @@ function composeCallbackData(ctx: ContextMessageUpdate, items: any): any {
  * @param ctx - message update object
  * @param options - an object with
  * */
-export function buildMenu(
-  ctx: ContextMessageUpdate,
-  options: any[][]
-): any {
+export function buildMenu(ctx: ContextMessageUpdate, options: any[][]): any {
   let result: CallbackButton[][] = [];
-  options.forEach((row) => {
+  options.forEach(row => {
     const currentRow = row.map((button: EnumerableObject) => {
       const name: string = button.name.replace(
         button.name.charAt(0),
@@ -51,37 +48,6 @@ export function buildMenu(
     });
     result.push(currentRow);
   });
-  /*for (let item in options) {
-    if (options.hasOwnProperty(item)) {
-      const currentButton = [];
-      const name: string = options[item].name.replace(
-        options[item].name.charAt(0),
-        options[item].name.charAt(0).toUpperCase()
-      );
-      const data: any = composeCallbackData(ctx, options[item]);
 
-      currentButton.push([Markup.callbackButton(name, data)]);
-    }
-  }*/
-
-  return Markup.inlineKeyboard(result, {
-    wrap: (btn, index, currentRow) => {
-      console.log(currentRow);
-    }
-  });
-}
-
-export async function addBackButton(
-  ctx: ContextMessageUpdate
-): Promise<EnumerableObject> {
-  const previousScene = await ctx.botScenes.previousScene(ctx);
-
-  return Object.assign(this.getMenuStructure(), {
-    back: {
-      name: ctx.i18n.t('buttons.back'),
-      data: {
-        scene: previousScene
-      }
-    }
-  });
+  return Markup.inlineKeyboard(result);
 }

@@ -7,8 +7,12 @@ const load = async function<T>(
   ctx?: ContextMessageUpdate,
   options?: request.RequestPromiseOptions
 ): Promise<T> {
+  let requestUrl =
+    url.search(process.env.API_DOMAIN) !== -1
+      ? url
+      : `${process.env.API_DOMAIN}${url}`;
   return request
-    .get(url, options)
+    .get(requestUrl, options)
     .then((response) => {
       return response;
     })

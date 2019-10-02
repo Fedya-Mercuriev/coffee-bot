@@ -23,7 +23,7 @@ export function addOrderItem(ctx: ContextMessageUpdate): void {
  * Adds all necessary properties to session when order is started
  * @param ctx - context message update object
  * */
-export function init(ctx: ContextMessageUpdate): void {
+export async function init<T>(ctx: ContextMessageUpdate): Promise<boolean> {
   ctx.session.order = {
     items: null
   };
@@ -35,6 +35,7 @@ export function init(ctx: ContextMessageUpdate): void {
   if (!ctx.session.order.items.size) {
     addOrderItem(ctx);
   }
+  return true;
 }
 
 /**

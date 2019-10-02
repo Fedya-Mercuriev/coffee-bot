@@ -9,6 +9,7 @@ import cart from './controllers/cart';
 import contacts from './controllers/contacts';
 import about from './controllers/about';
 import order from './controllers/order';
+import goods from './controllers/order_goods';
 import amount from './controllers/order_amount';
 import additions from './controllers/order_additions';
 
@@ -21,7 +22,7 @@ const i18n = new TelegrafI18n({
 });
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const stage = new Stage([start, cart, contacts, about, order, amount]);
+const stage = new Stage([start, cart, contacts, about, order, goods, amount]);
 
 bot.use(session());
 bot.use(i18n.middleware());
@@ -54,6 +55,17 @@ bot.context.botScenes = {
       return ctx.session.scenesMap[ctx.session.scenesMap.length - 2];
     } else {
       return ctx.session.scenesMap[0];
+    }
+  },
+  currentScene: (ctx: ContextMessageUpdate): string => {
+    return ctx.session.scenesMap[ctx.session.scenesMap.length - 1];
+  },
+  removeSceneFromMap: (ctx: ContextMessageUpdate, sceneName: string): void => {
+    try {
+      ctx.session.scenesMap.splice(ctx.session.scenesMap.indexOf(sceneName));
+      console.log(ctx.session.scenesMap);
+    } catch(e) {
+      console.error(e);
     }
   }
 };

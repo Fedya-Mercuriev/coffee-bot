@@ -21,7 +21,8 @@ start.enter(
       order: {
         name: ctx.i18n.t('menus.main.order'),
         data: {
-          scene: 'order'
+          scene: 'order',
+          url: `${process.env.API_DOMAIN}/api/good_types/`
         }
       },
       cart: {

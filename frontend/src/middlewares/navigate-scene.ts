@@ -1,18 +1,43 @@
-import { ContextMessageUpdate } from "telegraf";
+import { ContextMessageUpdate } from 'telegraf';
 
-export default async function navigateToScene(ctx: ContextMessageUpdate, next: Function) {
-    if (ctx.updateType === 'callback_query') {
-        await ctx.answerCbQuery();
-        const args = ctx.session.currentMenu.get(ctx.update.callback_query.data);
+async function isPrevNextScene(
+  ctx: ContextMessageUpdate,
+  targetScene: string
+): Promise<string> {
+  // Here we identify whether the scene user navigates to is next or previous
+  if (targetScene !== (await ctx.botScenes.previousScene(ctx))) {
+    return 'next';
+  } else {
+    return 'prev';
+  }
+}
 
-        if (args.scene) {
-            ctx.scene.leave();
-            ctx.botScenes.iAmHere(ctx, args.scene);
-            ctx.scene.enter(args.scene);
-        } else {
-            return next();
-        }
+async function updateRoutes(ctx: ContextMessageUpdate, targetScene: string) {
+  (await isPrevNextScene(ctx, targetScene)) === 'next'
+    ? ctx.session.currentRoute(
+        ctx.session.currentMenu.get(ctx.update.callback_query.data).url
+      )
+    : ctx.session.previousScene(ctx);
+}
+
+export default async function navigateToScene(
+  ctx: ContextMessageUpdate,
+  next: Function
+) {
+  if (ctx.updateType === 'callback_query') {
+    await ctx.answerCbQuery();
+    const args = ctx.session.currentMenu.get(ctx.update.callback_query.data);
+
+    if (args.scene) {
+      if (args.url) {
+        await updateRoutes(ctx, args.scene);
+      }
+      ctx.botScenes.iAmHere(ctx, args.scene);
+      ctx.scene.enter(args.scene);
     } else {
-        return next();
+      return next();
     }
+  } else {
+    return next();
+  }
 }

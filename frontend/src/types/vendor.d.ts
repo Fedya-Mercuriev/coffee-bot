@@ -22,10 +22,18 @@ declare module 'vendor' {
     currentOrderKey: string;
     orderInfoMsg: string;
     menu: object;
+    router: {
+      previous: string;
+      current: string;
+    };
+    prevRoute: Function;
+    currentRoute: Function;
   }
   interface BotContext {
     iAmHere: Function;
     previousScene: Function;
+    currentScene: Function;
+    removeSceneFromMap: Function;
   }
   interface Operation {
     name: string;

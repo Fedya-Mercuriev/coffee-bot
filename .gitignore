@@ -7,3 +7,4 @@ package-lock.json
 Thumbs.db
 dist/**/*
 backend_env
+trash.py

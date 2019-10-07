@@ -68,10 +68,15 @@
     "additions": "Additions"
   },
   "buttons": {
-    "back": "Back"
+    "back": "Back",
+    "try_again": "Try again"
   },
   "status": {
     "return_main_menu": "Returning to main menu",
     "update_order": "Updating your order"
+  },
+  "errors": {
+    "common": "Something went wrong. Please, try again.",
+    "wrongPassword": "Wrong password! Please, try again."
   }
 }

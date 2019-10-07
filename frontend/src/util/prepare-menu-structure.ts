@@ -12,10 +12,19 @@ export default class MenuStructure {
   }
   private _prepareRows(menuData: { [key: string]: any } | any[]): any[] {
     let result: any[] = [];
+    let menu;
     if (!Array.isArray(menuData)) {
-      menuData = _.values(menuData);
+      menu = _.values(menuData);
+      if (menu.length === 2 && !menu[0].hasOwnProperty('name')) {
+        menu = [
+          {
+            name: menu[0],
+            data: menu[1]
+          }
+        ];
+      }
     }
-    menuData.forEach((item: object) => {
+    menu.forEach((item: object) => {
       result.push([item]);
     });
     return result;
@@ -47,7 +56,7 @@ export default class MenuStructure {
           }
         ]);
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
       });
     return this;

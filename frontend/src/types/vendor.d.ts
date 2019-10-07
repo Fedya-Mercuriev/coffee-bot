@@ -28,6 +28,8 @@ declare module 'vendor' {
     };
     prevRoute: Function;
     currentRoute: Function;
+    isAdmin: boolean;
+    token: string;
   }
   interface BotContext {
     iAmHere: Function;

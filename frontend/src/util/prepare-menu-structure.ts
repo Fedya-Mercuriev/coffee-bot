@@ -5,7 +5,9 @@ import { ContextMessageUpdate } from 'telegraf';
 export default class MenuStructure {
   public menuItems: MenuButton[][] | MenuButton[];
   public constructor(data: any) {
-    this.menuItems = this._prepareRows(JSON.parse(data));
+    this.menuItems = this._prepareRows(
+      typeof data === 'string' ? JSON.parse(data) : data
+    );
   }
   public get menu(): MenuButton[][] | MenuButton[] {
     return this.menuItems;

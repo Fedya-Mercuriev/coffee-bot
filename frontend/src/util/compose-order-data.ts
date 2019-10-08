@@ -1,7 +1,7 @@
 import { OrderItem } from 'order';
 
 export default function composeOrderData(): void {
-  const result: OrderItem = {};
+  const result: { [key: string]: any } = {};
   const menu = this.menu;
   for (let key in menu) {
     if (key !== 'description') {

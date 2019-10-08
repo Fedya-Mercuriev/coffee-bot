@@ -10,7 +10,7 @@ export default async function invokeFunction(
     const args = ctx.session.currentMenu.get(ctx.update.callback_query.data);
 
     if (args.cb) {
-      app.call(args.cb.name, args.cb.args);
+      app.call(args.cb.name, ...args.cb.args);
     }
     return next();
   } else {

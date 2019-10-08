@@ -68,7 +68,7 @@ class App {
 
     this.stack
       .filter(operation => operation.name === name)
-      .map(operation => operation.callback.apply(this, ...args));
+      .map(operation => operation.callback.apply(this, args));
   }
 
   // Binds a callback, that'll be accessed by it's name and will be invoked
@@ -130,7 +130,8 @@ class App {
     };
     ctx.session.scenesMap = [];
     ctx.session.currentMenu = new Map();
-    createRouter(ctx);
+    ctx.session.isAdmin = false;
+    ctx.session.token = null;
   }
 }
 

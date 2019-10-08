@@ -14,10 +14,10 @@ export default async function displayError(options: {
     data: {
       cb: {
         name: callback,
-        args: args.join(',')
+        args: args
       }
     }
   };
-  menuStructure = new MenuStructure(JSON.stringify(menuStructure));
+  menuStructure = new MenuStructure(menuStructure);
   await ctx.reply(`🚫 ${errorMsg}`, buildMenu(ctx, menuStructure.menu).extra());
 }

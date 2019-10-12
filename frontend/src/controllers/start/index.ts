@@ -4,16 +4,18 @@ import Scene from 'telegraf/scenes/base';
 import app from '../../_app';
 import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
+import auth from '../../middlewares/auth';
 import { buildMenu } from '../../util/keyboards';
 import clearScene from '../../util/clear-scene';
 import addLocaleToMenu from '../../util/add-locale';
+import login from '../../util/login';
 import MenuStructure from '../../util/prepare-menu-structure';
 
 const sceneId = 'start';
 const { Leave } = Stage;
 const start = new Scene(sceneId);
 
-start.use(navigateToScene, invokeFunction);
+start.use(auth, navigateToScene, invokeFunction);
 
 start.enter(
   async (ctx: ContextMessageUpdate): Promise<any> => {
@@ -47,10 +49,9 @@ start.enter(
     menuStructure = new MenuStructure(
       JSON.stringify(menuStructure)
     ).processButtons(addLocaleToMenu, ctx, 'main');
-
     if (!ctx.session.started) {
       await app.start(ctx);
-
+      await login(ctx);
       ctx.botScenes.iAmHere(ctx, sceneId);
       ctx.session.messages.storage = await ctx.reply(
         ctx.i18n.t('scenes.start.welcome'),

@@ -1,4 +1,5 @@
 import { OrderObject } from './order';
+import { ReturnedMessage } from 'vendor';
 
 declare module 'vendor' {
   interface EnumerableObject {
@@ -9,9 +10,9 @@ declare module 'vendor' {
     [key: string]: any;
   }
   interface CustomMessage {
-    [key: string]: number | string;
+    [key: string]: string | ReturnedMessage;
     key: string;
-    message_id: number;
+    message: ReturnedMessage;
   }
   interface SessionStorage {
     [key: string]: any;
@@ -49,13 +50,6 @@ declare module 'vendor' {
     cb: string;
     args: string;
   }
-  /*interface OrderData {
-      order: {
-          select: string;
-          value: string;
-      }
-      scene: string;
-  }*/
   interface Menu<T> {
     title: string;
     data: T;

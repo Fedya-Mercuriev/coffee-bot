@@ -1,7 +1,7 @@
 import { ContextMessageUpdate } from 'telegraf';
 import request from 'request-promise';
 import app from '../_app';
-import displayError from '../util/display-error';
+import { displayError, hideError } from './error-handler';
 
 function login(ctx: ContextMessageUpdate, password?: string): Promise<boolean> {
   return new Promise(async (resolve) => {
@@ -20,6 +20,7 @@ function login(ctx: ContextMessageUpdate, password?: string): Promise<boolean> {
         }
       );
       ctx.session.token = JSON.parse(response).token;
+      await hideError(ctx);
       resolve(true);
     } catch (error) {
       if (error.statusCode === 400) {
@@ -35,6 +36,7 @@ function login(ctx: ContextMessageUpdate, password?: string): Promise<boolean> {
           args: [ctx]
         });
       }
+      resolve(false);
     }
   });
 }

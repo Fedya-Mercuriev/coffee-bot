@@ -64,7 +64,7 @@ bot.context.botScenes = {
     try {
       ctx.session.scenesMap.splice(ctx.session.scenesMap.indexOf(sceneName));
       console.log(ctx.session.scenesMap);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   }

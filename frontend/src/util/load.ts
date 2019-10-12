@@ -21,5 +21,7 @@ const load = async function<T>(
     });
 };
 
+
+
 app.bind('load', load);
 export default load;

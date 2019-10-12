@@ -31,10 +31,10 @@ function createRouter(ctx: ContextMessageUpdate): void | string {
 }
 
 class App {
-  sorted: boolean;
-  stack: Operation[];
+  private sorted: boolean;
+  private stack: Operation[];
 
-  constructor() {
+  public constructor() {
     this.sorted = false;
     this.stack = [];
   }
@@ -53,7 +53,7 @@ class App {
    * @param name - function name to be invoked
    * @param args - arguments to be passed to the invoked function
    * */
-  call(name: string, ...args: any): void {
+  public call(name: string, ...args: any): void {
     const normalizedScope = App.normalizeName(name);
 
     if (!this.sorted) {
@@ -77,7 +77,7 @@ class App {
    * @param callback - a function itself
    * @param order - an order of invocation (will be used by the start mechanism to determine the invocation order)
    * */
-  bind(name: string, callback: Function, order?: number): void {
+  public bind(name: string, callback: Function, order?: number): void {
     let functionNames: string[] = App.normalizeName(name);
 
     if (_.find(functionNames, name)) {
@@ -93,35 +93,43 @@ class App {
   }
 
   // Invokes all operations at the start of the app
-  start(ctx: ContextMessageUpdate) {
+  public async start(ctx: ContextMessageUpdate): Promise<any> {
     ctx.session.started = true;
     ctx.session.messages = {
       _messages: new Map(),
       get storage() {
         return this._messages;
       },
-      set storage(message: ReturnedMessage | CustomMessage) {
-        if (typeof message !== 'boolean') {
-          if (!message.key) {
-            const { message_id } = message;
-            let key = generateRandomString(15);
-
-            // Generate new key for accessing message repeatedly until it's unique
-            while (this._messages.has(key)) {
-              key = generateRandomString(15);
-            }
+      set storage(messageObj: ReturnedMessage | CustomMessage) {
+        if (typeof messageObj !== 'boolean') {
+          if (!messageObj.key) {
+            const { message_id } = messageObj;
+            let key = generateRandomString(15, this._messages);
 
             this._messages.set(key, message_id);
             // This block of code gets executed when a object with a desired key and message id is provided
           } else {
-            const { key, message_id } = message;
+            const { key, message } = messageObj;
+            const { message_id } = message;
             this._messages.set(key, message_id);
           }
         } else {
           return;
         }
       },
-      hasMessages() {
+      getMessage(key: string): string {
+        if (this._messages.has(key)) {
+          return this._messages.get(key);
+        }
+        console.error(`Нет сообщения с ключом '${key}'`);
+      },
+      hasMessage(key: string): boolean {
+        return this._messages.has(key);
+      },
+      deleteMessage(key: string) {
+        this.messages.delete(key);
+      },
+      isNotEmpty(): boolean {
         return this._messages.size > 0;
       },
       clearStorage() {

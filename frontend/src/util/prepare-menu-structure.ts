@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import MenuButton from 'menu-button';
 import { ContextMessageUpdate } from 'telegraf';
+import { ScenesMapItem } from 'vendor';
+import MenuButton from './menu-button';
 
 export default class MenuStructure {
   public menuItems: MenuButton[][] | MenuButton[];
@@ -48,12 +49,12 @@ export default class MenuStructure {
   public addBackButton(ctx: ContextMessageUpdate): this {
     ctx.botScenes
       .previousScene(ctx)
-      .then((previousScene: string) => {
+      .then((previousSceneObj: ScenesMapItem) => {
         this.menuItems.push([
           {
             name: ctx.i18n.t('buttons.back'),
             data: {
-              scene: previousScene
+              scene: previousSceneObj
             }
           }
         ]);

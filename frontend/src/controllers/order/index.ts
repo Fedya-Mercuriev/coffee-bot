@@ -29,25 +29,21 @@ order.enter(
       await init(ctx);
     }
 
-    await load(ctx.session.currentRoute())
-      .then(
-        async (response: string): Promise<string | void> => {
-          if (JSON.parse(response).length === 1) {
-            // Switching user to a scene for choosing goods(default) if no other items are available
-            ctx.botScenes.removeSceneFromMap(ctx, sceneId);
-            ctx.botScenes.iAmHere(ctx, 'order_goods');
-            sceneSwitched = true;
-            return ctx.scene.enter('order_goods');
-          }
-          menuStructure = new MenuStructure(response)
-            .processButtons(normalizeButtonProperties)
-            // .processButtons(navigationAdder, ['order_amount', 'order_additions'])
-            .addBackButton(ctx);
-        }
-      )
-      .catch(e => {
-        console.error(e);
-      });
+    await load(ctx.session.route, ctx).then((response: string):
+      | string
+      | void => {
+      if (JSON.parse(response).length === 1) {
+        // Switching user to a scene for choosing goods(default) if no other items are available
+        ctx.botScenes.removeSceneFromMap(ctx, sceneId);
+        ctx.botScenes.iAmHere(ctx, 'order_goods');
+        sceneSwitched = true;
+        return ctx.scene.enter('order_goods');
+      }
+      menuStructure = new MenuStructure(response)
+        .processButtons(normalizeButtonProperties)
+        // .processButtons(navigationAdder, ['order_amount', 'order_additions'])
+        .addBackButton(ctx);
+    });
     if (sceneSwitched) return;
 
     if (menuStructure) {

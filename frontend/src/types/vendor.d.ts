@@ -18,19 +18,23 @@ declare module 'vendor' {
     [key: string]: any;
     started: boolean;
     messages: any;
-    scenesMap: string[];
+    scenesMap: ScenesMapItem[];
     order: OrderObject;
     currentOrderKey: string;
     orderInfoMsg: string;
     menu: object;
-    router: {
-      previous: string;
-      current: string;
-    };
-    prevRoute: Function;
-    currentRoute: Function;
+    router: Router;
     isAdmin: boolean;
     token: string;
+  }
+  interface Router {
+    _route: string;
+    route: string;
+    getRoute: Function;
+  }
+  interface ScenesMapItem {
+    name: string;
+    url?: string;
   }
   interface BotContext {
     iAmHere: Function;

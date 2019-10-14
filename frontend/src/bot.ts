@@ -2,6 +2,7 @@ require('dotenv').config();
 import path from 'path';
 import Telegraf, { ContextMessageUpdate, Extra, Markup } from 'telegraf';
 import TelegrafI18n, { match } from 'telegraf-i18n';
+import { ScenesMapItem } from 'vendor';
 import Stage from 'telegraf/stage';
 import session from 'telegraf/session';
 import start from './controllers/start';
@@ -12,6 +13,7 @@ import order from './controllers/order';
 import goods from './controllers/order_goods';
 import amount from './controllers/order_amount';
 import additions from './controllers/order_additions';
+import _ from 'lodash';
 
 const i18n = new TelegrafI18n({
   defaultLanguage: 'ru',
@@ -36,10 +38,17 @@ bot.context.botScenes = {
    * @param sceneName - Name of the current scene
    * */
   iAmHere: (ctx: ContextMessageUpdate, sceneName: string): void => {
-    const sceneIndex = ctx.session.scenesMap.indexOf(sceneName);
+    const sceneIndex = _.findIndex(
+      ctx.session.scenesMap,
+      item => item.name === sceneName
+    );
+    const sceneObj: { name: string; url?: string } = {
+      name: sceneName,
+      url: ctx.session.route ? ctx.session.route : null
+    };
 
-    if (ctx.session.scenesMap.indexOf(sceneName) === -1) {
-      ctx.session.scenesMap.push(sceneName);
+    if (_.findIndex(ctx.session.scenesMap, sceneObj) === -1) {
+      ctx.session.scenesMap.push(sceneObj);
     } else {
       ctx.session.scenesMap = sceneIndex
         ? ctx.session.scenesMap.slice(0, sceneIndex + 1)
@@ -52,21 +61,24 @@ bot.context.botScenes = {
    * */
   previousScene: async (ctx: ContextMessageUpdate): Promise<string> => {
     if (ctx.session.scenesMap.length > 1) {
-      return ctx.session.scenesMap[ctx.session.scenesMap.length - 2];
+      return ctx.session.scenesMap[ctx.session.scenesMap.length - 2].name;
     } else {
-      return ctx.session.scenesMap[0];
+      return ctx.session.scenesMap[0].name;
     }
   },
-  currentScene: (ctx: ContextMessageUpdate): string => {
+  currentScene: (ctx: ContextMessageUpdate): ScenesMapItem => {
     return ctx.session.scenesMap[ctx.session.scenesMap.length - 1];
   },
   removeSceneFromMap: (ctx: ContextMessageUpdate, sceneName: string): void => {
-    try {
-      ctx.session.scenesMap.splice(ctx.session.scenesMap.indexOf(sceneName));
-      console.log(ctx.session.scenesMap);
-    } catch (e) {
-      console.error(e);
+    const sceneIndex = _.findIndex(
+      ctx.session.scenesMap,
+      item => item.name === sceneName
+    );
+    if (sceneIndex !== -1) {
+      console.error(`Нет объекта сцены с названием '${sceneName}'`);
+      return;
     }
+    ctx.session.scenesMap.splice(sceneIndex);
   }
 };
 

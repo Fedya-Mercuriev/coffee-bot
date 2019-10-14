@@ -13,11 +13,10 @@ async function isPrevNextScene(
 }
 
 async function updateRoutes(ctx: ContextMessageUpdate, targetScene: string) {
-  (await isPrevNextScene(ctx, targetScene)) === 'next'
-    ? ctx.session.currentRoute(
-        ctx.session.currentMenu.get(ctx.update.callback_query.data).url
-      )
-    : ctx.session.previousScene(ctx);
+  ctx.session.route =
+    (await isPrevNextScene(ctx, targetScene)) === 'next'
+      ? ctx.session.currentMenu.get(ctx.update.callback_query.data).url
+      : ctx.session.previousScene(ctx).url;
 }
 
 export default async function navigateToScene(

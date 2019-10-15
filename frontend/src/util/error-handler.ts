@@ -42,14 +42,15 @@ export async function displayError(options: {
       console.log(e.message);
     }
     return;
+  } else {
+    ctx.session.messages.storage = {
+      key: 'error',
+      message: await ctx.reply(
+        `🚫 ${errorMsg}`,
+        callback ? buildMenu(ctx, menuStructure.menu).extra() : null
+      )
+    };
   }
-  ctx.session.messages.storage = {
-    key: 'error',
-    message: await ctx.reply(
-      `🚫 ${errorMsg}`,
-      callback ? buildMenu(ctx, menuStructure.menu).extra() : null
-    )
-  };
 }
 
 export async function hideError(ctx: ContextMessageUpdate) {

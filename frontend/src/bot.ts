@@ -59,7 +59,7 @@ bot.context.botScenes = {
    * Returns name of a previous scene in a map
    * @param ctx - Message update object
    * */
-  previousScene: async (ctx: ContextMessageUpdate): Promise<string> => {
+  previousScene: (ctx: ContextMessageUpdate): string => {
     if (ctx.session.scenesMap.length > 1) {
       return ctx.session.scenesMap[ctx.session.scenesMap.length - 2].name;
     } else {

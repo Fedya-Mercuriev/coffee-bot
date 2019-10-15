@@ -6,16 +6,20 @@ import MenuButton from './menu-button';
 export default class MenuStructure {
   public menuItems: MenuButton[][] | MenuButton[];
   public constructor(data: any) {
-    this.menuItems = this._prepareRows(
-      typeof data === 'string' ? JSON.parse(data) : data
-    );
+    if (!data) {
+      this.menuItems = [];
+    } else {
+      this.menuItems = this._prepareRows(
+        typeof data === 'string' ? JSON.parse(data) : data
+      );
+    }
   }
   public get menu(): MenuButton[][] | MenuButton[] {
     return this.menuItems;
   }
   private _prepareRows(menuData: { [key: string]: any } | any[]): any[] {
     let result: any[] = [];
-    let menu;
+    let menu = menuData;
     if (!Array.isArray(menuData)) {
       menu = _.values(menuData);
       if (menu.length === 2 && !menu[0].hasOwnProperty('name')) {
@@ -47,21 +51,15 @@ export default class MenuStructure {
     return this;
   }
   public addBackButton(ctx: ContextMessageUpdate): this {
-    ctx.botScenes
-      .previousScene(ctx)
-      .then((previousSceneObj: ScenesMapItem) => {
-        this.menuItems.push([
-          {
-            name: ctx.i18n.t('buttons.back'),
-            data: {
-              scene: previousSceneObj
-            }
-          }
-        ]);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    const previousSceneObj: ScenesMapItem = ctx.botScenes.previousScene(ctx);
+    this.menuItems.push([
+      {
+        name: ctx.i18n.t('buttons.back'),
+        data: {
+          scene: previousSceneObj
+        }
+      }
+    ]);
     return this;
   }
 }

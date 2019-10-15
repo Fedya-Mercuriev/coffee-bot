@@ -5,7 +5,7 @@ import app from '../../_app';
 import navigateToScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import auth from '../../middlewares/auth';
-import { buildMenu } from '../../util/keyboards';
+import { displayMenu } from '../../util/keyboards';
 import clearScene from '../../util/clear-scene';
 import addLocaleToMenu from '../../util/add-locale';
 import login from '../../util/login';
@@ -48,21 +48,19 @@ start.enter(
     };
     menuStructure = new MenuStructure(
       JSON.stringify(menuStructure)
-    ).processButtons(addLocaleToMenu, ctx, 'main');
+    ).processButtons(addLocaleToMenu, ctx, 'menus.main');
     if (!ctx.session.started) {
       await app.start(ctx);
       await login(ctx);
       ctx.botScenes.iAmHere(ctx, sceneId);
-      ctx.session.messages.storage = await ctx.reply(
-        ctx.i18n.t('scenes.start.welcome'),
-        buildMenu(ctx, menuStructure.menu).extra()
-      );
+      await displayMenu(ctx, menuStructure.menu, {
+        message: ctx.i18n.t('scenes.start.welcome')
+      });
     } else {
       await clearScene(ctx);
-      ctx.session.messages.storage = await ctx.editMessageText(
-        ctx.i18n.t('scenes.start.welcome'),
-        buildMenu(ctx, menuStructure.menu).extra()
-      );
+      await displayMenu(ctx, menuStructure.menu, {
+        message: ctx.i18n.t('scenes.start.welcome')
+      });
     }
   }
 );

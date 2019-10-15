@@ -1,8 +1,15 @@
 import { Markup, ContextMessageUpdate, CallbackButton } from 'telegraf';
 import { EnumerableObject } from 'vendor';
+import app from '../_app';
 import generateRandomString from './generate-random-string';
 import extractProps from './extract-props-from-object';
 import _ from 'lodash';
+import { displayError } from './error-handler';
+
+interface DisplayMenuOptions {
+  message: string;
+  callback?: Function;
+}
 
 function composeCallbackData(ctx: ContextMessageUpdate, items: any): string {
   /*
@@ -51,3 +58,51 @@ export function buildMenu(ctx: ContextMessageUpdate, options: any[][]): any {
 
   return Markup.inlineKeyboard(result);
 }
+
+export async function displayMenu(
+  ctx: ContextMessageUpdate,
+  menuStructure: any[][],
+  options: DisplayMenuOptions
+): Promise<void> {
+  if (!ctx.session.messages.hasMessage('menu')) {
+    let message = null;
+    try {
+      message = await ctx.reply(
+        options.message,
+        buildMenu(ctx, menuStructure).extra()
+      );
+      ctx.session.messages.storage = {
+        key: 'menu',
+        message: message
+      };
+    } catch (e) {
+      await displayError({
+        ctx: ctx,
+        errorMsg: ctx.i18n.t('errors.common'),
+        callback: 'displayMenu',
+        args: [ctx, menuStructure, { message: options.message }]
+      });
+    }
+  } else {
+    let message = null;
+    try {
+      message = await ctx.editMessageText(
+        options.message,
+        buildMenu(ctx, menuStructure).extra()
+      );
+      ctx.session.messages.storage = {
+        key: 'menu',
+        message: message
+      };
+    } catch (e) {
+      await displayError({
+        ctx: ctx,
+        errorMsg: ctx.i18n.t('errors.common'),
+        callback: 'displayMenu',
+        args: [ctx, menuStructure, { message: options.message }]
+      });
+    }
+  }
+}
+
+app.bind('displayMenu', displayMenu);

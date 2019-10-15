@@ -9,7 +9,7 @@ import MenuButton from 'menu-button';
 export default function addLocaleToMenu(
   button: MenuButton,
   ctx: ContextMessageUpdate,
-  menuType: string
+  path: string
 ): string {
-  return ctx.i18n.t(`menus.${menuType}.${button.name}`);
+  return ctx.i18n.t(`menus.${path}.${button.name}`);
 }

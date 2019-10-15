@@ -2,33 +2,22 @@ import { ContextMessageUpdate } from 'telegraf';
 import Stage from 'telegraf/stage';
 import Scene from 'telegraf/scenes/base';
 import navigateToScene from '../../middlewares/navigate-scene';
-// import invokeFunction from '../../middlewares/invoke-function';
-import { buildMenu } from '../../util/keyboards';
+import MenuStructure from '../../util/prepare-menu-structure';
+import { displayMenu } from '../../util/keyboards';
 
 const sceneId = 'about';
 const { Leave } = Stage;
 const about = new Scene(sceneId);
 
-about.use(
-  navigateToScene
-  // invokeFunction
-);
+about.use(navigateToScene);
 
 about.enter(async (ctx: ContextMessageUpdate) => {
-  const menuStructure = {
-    back: {
-      name: ctx.i18n.t('buttons.back'),
-      data: {
-        scene: await ctx.botScenes.previousScene(ctx)
-      }
-    }
-  };
+  const menuStructure = new MenuStructure('').addBackButton(ctx);
 
-  ctx.session.messages.clearStorage();
-  await ctx.editMessageText(
-    ctx.i18n.t('scenes.about.content'),
-    buildMenu(ctx, menuStructure).extra()
-  );
+  // ctx.session.messages.clearStorage();
+  await displayMenu(ctx, menuStructure.menu, {
+    message: ctx.i18n.t('scenes.about.content')
+  });
 });
 
 export default about;

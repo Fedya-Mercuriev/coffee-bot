@@ -4,7 +4,7 @@ import Scene from 'telegraf/scenes/base';
 import Stage from 'telegraf/stage';
 import MenuStructure from '../../util/prepare-menu-structure';
 import load from '../../util/load';
-import { buildMenu } from '../../util/keyboards';
+import { displayMenu } from '../../util/keyboards';
 import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import { returnToMainMenu } from './middlewares';
@@ -32,7 +32,7 @@ order.enter(
     await load(ctx.session.route, ctx).then((response: string):
       | string
       | void => {
-      if (JSON.parse(response).length === 1) {
+      if (JSON.parse(response).length !== 1) {
         // Switching user to a scene for choosing goods(default) if no other items are available
         ctx.botScenes.removeSceneFromMap(ctx, sceneId);
         ctx.botScenes.iAmHere(ctx, 'order_goods');
@@ -41,21 +41,16 @@ order.enter(
       }
       menuStructure = new MenuStructure(response)
         .processButtons(normalizeButtonProperties)
-        // .processButtons(navigationAdder, ['order_amount', 'order_additions'])
+        .processButtons(navigationAdder, ['order_amount', 'order_additions'])
         .addBackButton(ctx);
     });
     if (sceneSwitched) return;
 
     if (menuStructure) {
-      const { message_id } = await displayOrderInfo(ctx);
-      ctx.session.messages.storage = {
-        key: 'orderInfo',
-        message_id
-      };
-      await ctx.reply(
-        ctx.i18n.t('scenes.order.welcome'),
-        buildMenu(ctx, menuStructure.menu).extra()
-      );
+      await displayOrderInfo(ctx);
+      await displayMenu(ctx, menuStructure.menu, {
+        message: ctx.i18n.t('scenes.order.welcome')
+      });
     }
   }
 );

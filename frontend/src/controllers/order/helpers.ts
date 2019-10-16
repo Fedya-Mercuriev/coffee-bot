@@ -60,11 +60,18 @@ export async function finish(ctx: ContextMessageUpdate): Promise<void> {
 
 /**
  * Processes given object and adds 'scene' property for navigating around desired scenes
- * @param items - an object of menu items in current menu
- * @param scenes - an array of scenes to be chosen a scene from
+ * @param item - a current menu structure item
+ * @param customSceneName - a static name for a scene of an item
  * */
-export function navigationAdder(items: any, scenes: string[]): any {
-  let result: any = {};
+export function navigationAdder(
+  item: any,
+  customSceneName: string
+): { [key: string]: any; scene: string } {
+  if (customSceneName) {
+    return Object.assign(item, { scene: customSceneName });
+  }
+  return Object.assign(item, { scene: 'order_' + item.name });
+  /*let result: any = {};
   Object.keys(items).forEach((item: string) => {
     let productObject: ProductObject = {
       name: null,
@@ -98,7 +105,18 @@ export function navigationAdder(items: any, scenes: string[]): any {
     result[item] = productObject;
   });
   if (!this.structure) return;
-  this.structure = result;
+  this.structure = result;*/
+}
+
+/**
+ * Processes given object and adds 'scene' property for navigating around desired scenes
+ * @param item - a current menu structure item
+ * */
+export function addOrderdata(item: any): { [key: string]: any } {
+  const orderInfoObj: {
+    [key: string]: any;
+  } = {};
+  return orderInfoObj;
 }
 
 /**

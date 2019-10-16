@@ -42,10 +42,12 @@ bot.context.botScenes = {
       ctx.session.scenesMap,
       item => item.name === sceneName
     );
-    const sceneObj: { name: string; url?: string } = {
-      name: sceneName,
-      url: ctx.session.route ? ctx.session.route : null
+    let sceneObj: { name: string; url?: string } = {
+      name: sceneName
     };
+    sceneObj = ctx.session.route
+      ? Object.assign(sceneObj, { url: ctx.session.route })
+      : sceneObj;
 
     if (_.findIndex(ctx.session.scenesMap, sceneObj) === -1) {
       ctx.session.scenesMap.push(sceneObj);
@@ -74,11 +76,11 @@ bot.context.botScenes = {
       ctx.session.scenesMap,
       item => item.name === sceneName
     );
-    if (sceneIndex !== -1) {
+    if (sceneIndex === -1) {
       console.error(`Нет объекта сцены с названием '${sceneName}'`);
       return;
     }
-    ctx.session.scenesMap.splice(sceneIndex);
+    ctx.session.scenesMap.splice(sceneIndex, 1);
   }
 };
 

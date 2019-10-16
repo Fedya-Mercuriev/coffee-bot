@@ -12,11 +12,10 @@ async function isPrevNextScene(
   }
 }
 
-async function updateRoutes(ctx: ContextMessageUpdate, targetScene: string) {
-  ctx.session.route =
-    (await isPrevNextScene(ctx, targetScene)) === 'next'
-      ? ctx.session.currentMenu.get(ctx.update.callback_query.data).url
-      : ctx.session.previousScene(ctx).url;
+async function updateRoutes(ctx: ContextMessageUpdate) {
+  ctx.session.route = ctx.session.currentMenu.get(
+    ctx.update.callback_query.data
+  ).url;
 }
 
 export default async function navigateToScene(
@@ -29,7 +28,9 @@ export default async function navigateToScene(
 
     if (args.scene) {
       if (args.url) {
-        await updateRoutes(ctx, args.scene);
+        await updateRoutes(ctx);
+      } else {
+        ctx.session.route = null;
       }
       ctx.botScenes.iAmHere(ctx, args.scene);
       ctx.scene.enter(args.scene);

@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import { ContextMessageUpdate } from 'telegraf';
 import { ReturnedMessage } from 'vendor';
-import { ProductObject } from 'product-object';
 import { GoodVolume } from 'good-volume';
-import { Good } from 'good';
 import { Additive } from 'additive';
 import clearScene from '../../util/clear-scene';
 import generateRandomString from '../../util/generate-random-string';

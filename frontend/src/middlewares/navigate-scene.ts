@@ -1,23 +1,5 @@
 import { ContextMessageUpdate } from 'telegraf';
-
-async function isPrevNextScene(
-  ctx: ContextMessageUpdate,
-  targetScene: string
-): Promise<string> {
-  // Here we identify whether the scene user navigates to is next or previous
-  if (targetScene !== (await ctx.botScenes.previousScene(ctx))) {
-    return 'next';
-  } else {
-    return 'prev';
-  }
-}
-
-async function updateRoutes(ctx: ContextMessageUpdate, targetScene: string) {
-  ctx.session.route =
-    (await isPrevNextScene(ctx, targetScene)) === 'next'
-      ? ctx.session.currentMenu.get(ctx.update.callback_query.data).url
-      : ctx.session.previousScene(ctx).url;
-}
+import updateRoutes from '../util/update-routes';
 
 export default async function navigateToScene(
   ctx: ContextMessageUpdate,
@@ -29,7 +11,9 @@ export default async function navigateToScene(
 
     if (args.scene) {
       if (args.url) {
-        await updateRoutes(ctx, args.scene);
+        await updateRoutes(ctx);
+      } else {
+        ctx.session.route = null;
       }
       ctx.botScenes.iAmHere(ctx, args.scene);
       ctx.scene.enter(args.scene);

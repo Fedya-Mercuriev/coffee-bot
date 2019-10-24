@@ -1,8 +1,8 @@
 export interface Good {
   [key: string]: any;
+  url: string;
+  good_id: number;
   name: string;
   description: string;
-  volume: boolean;
-  price: number;
-  good_type_id: number;
+  goodtype: number;
 }

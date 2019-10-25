@@ -11,7 +11,7 @@ import contacts from './controllers/contacts';
 import about from './controllers/about';
 import order from './controllers/order';
 import goods from './controllers/order_goods';
-import amount from './controllers/order_amount';
+import amount from './controllers/order_volumes';
 import additions from './controllers/order_additions';
 import _ from 'lodash';
 

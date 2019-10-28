@@ -5,7 +5,7 @@ import MenuButton from './menu-button';
 
 export default class MenuStructure {
   public menuItems: MenuButton[][] | MenuButton[];
-  public constructor(data: any) {
+  public constructor(ctx: ContextMessageUpdate, data: any) {
     if (!data) {
       this.menuItems = [];
     } else {
@@ -15,6 +15,7 @@ export default class MenuStructure {
     }
   }
   public get menu(): MenuButton[][] | MenuButton[] {
+    this._tidyStructure();
     return this.menuItems;
   }
   private _prepareRows(menuData: { [key: string]: any } | any[]): any[] {
@@ -36,6 +37,26 @@ export default class MenuStructure {
     });
     return result;
   }
+  // Removes all the properties that aren't name, description or plain objects
+  private _tidyStructure(): void {
+    function _modifyButton(button: any): void {
+      let keysToExclude = ['name', 'description', 'url', 'scene', 'cb', 'data'];
+      for (let key in button) {
+        if (button.hasOwnProperty(key) && keysToExclude.indexOf(key) === -1) {
+          delete button[key];
+        }
+      }
+    }
+    this.menuItems.forEach((buttons: MenuButton[][] | MenuButton[]): void => {
+      if (buttons.length > 1) {
+        buttons.forEach((item, index): void => {
+          _modifyButton(buttons[index]);
+        });
+      } else {
+        _modifyButton(buttons[0]);
+      }
+    });
+  }
   public processButtons(callback: Function, ...args: any[]): this {
     this.menuItems.forEach((buttons: any) => {
       if (buttons.length > 1) {
@@ -51,15 +72,18 @@ export default class MenuStructure {
     return this;
   }
   public addBackButton(ctx: ContextMessageUpdate): this {
-    const previousSceneObj: ScenesMapItem = ctx.botScenes.previousScene(ctx);
-    this.menuItems.push([
-      {
-        name: ctx.i18n.t('buttons.back'),
-        data: {
-          scene: previousSceneObj
-        }
+    const previousSceneName: ScenesMapItem = ctx.botScenes.previousScene(ctx);
+    const previousSceneUrl = ctx.session.router.getRoute(ctx, previousSceneName);
+    let buttonObj = {
+      name: ctx.i18n.t('buttons.back'),
+      data: {
+        scene: previousSceneName
       }
-    ]);
+    };
+    if (previousSceneUrl) {
+      buttonObj = _.merge({}, buttonObj, { data: { url: previousSceneUrl } });
+    }
+    this.menuItems.push([buttonObj]);
     return this;
   }
 }

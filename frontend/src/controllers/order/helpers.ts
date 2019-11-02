@@ -1,19 +1,20 @@
 import _ from 'lodash';
 import { ContextMessageUpdate } from 'telegraf';
 import { ReturnedMessage } from 'vendor';
+import { Good } from 'good';
 import { GoodVolume } from 'good-volume';
 import { Additive } from 'additive';
 import clearScene from '../../util/clear-scene';
 import generateRandomString from '../../util/generate-random-string';
+import { OrderItem } from 'order';
 
 // Adds a cell where info about current order will be stored
 export function addOrderItem(ctx: ContextMessageUpdate): void {
-  let itemKey: string = generateRandomString(10);
-  ctx.session.currentOrderKey = itemKey;
-  ctx.session.order.items.set(ctx.session.currentOrderKey, {
-    good: null,
-    volume: null,
-    additives: null
+  ctx.session.currentOrderId = generateRandomString(10);
+  ctx.session.order.items.set(ctx.session.currentOrderId, {
+    good: {},
+    volume: {},
+    additives: {}
   });
 }
 
@@ -23,10 +24,13 @@ export function addOrderItem(ctx: ContextMessageUpdate): void {
  * */
 export async function init<T>(ctx: ContextMessageUpdate): Promise<boolean> {
   ctx.session.order = {
+    getOrderItem(type: string, id?: string): OrderItem {
+      return this.items.get(id ? id : ctx.session.currentOrderId)[type];
+    },
     items: null
   };
   ctx.session.order.items = new Map();
-  ctx.session.currentOrderKey = null;
+  ctx.session.currentOrderId = null;
   ctx.session.orderInfoMsg = `* ${ctx.i18n.t(
     'scenes.order.orderInfoContent'
   )} *`;
@@ -107,17 +111,6 @@ export function navigationAdder(
 }
 
 /**
- * Processes given object and adds 'scene' property for navigating around desired scenes
- * @param item - a current menu structure item
- * */
-export function addOrderdata(item: any): { [key: string]: any } {
-  const orderInfoObj: {
-    [key: string]: any;
-  } = {};
-  return orderInfoObj;
-}
-
-/**
  * @param ctx - Context message update object
  * @param orderInfo - an object containing updated orderInfo
  * */
@@ -139,10 +132,9 @@ export async function updateOrderInfoMsg(
     return;
   }
   if (!_.isBoolean(editedMessage)) {
-    const { message_id } = editedMessage;
     ctx.session.messages.storage = {
       key: 'orderInfo',
-      message_id
+      message: editedMessage
     };
   }
 }
@@ -151,13 +143,13 @@ export async function composeOrderInfoMessage(
   ctx: ContextMessageUpdate
 ): Promise<string> {
   let messageContent = `${ctx.i18n.t('scenes.order.orderInfoMsg')}:\n`;
-  let title: string = ctx.session.order.item;
-  let volume: GoodVolume = ctx.session.order.amount;
-  let additions: Additive[] = ctx.session.order.additions;
+  let good: Good = ctx.session.order.items.get(ctx.session.currentOrderId).good;
+  let volume: GoodVolume = ctx.session.order.items.get(ctx.session.currentOrderId).volume;
+  // let additives: Additive[] = ctx.session.order.items.get(ctx.session.currentOrderId).additives;
   let price: number = ctx.session.order.price;
 
-  if (title) {
-    messageContent += `<b>${_.startCase(title)}</b>`;
+  if (good) {
+    messageContent += `<b>${_.startCase(good.name)}</b>`;
     if (typeof volume === 'object' && !_.every(volume, _.isNull)) {
       messageContent += `(${volume.name})`;
     }
@@ -165,14 +157,14 @@ export async function composeOrderInfoMessage(
   }
 
   // Composing additions list
-  if (_.isArray(additions) && additions.length) {
+  /*if (_.isArray(additives) && additives.length) {
     let additionsString = '';
 
     // Adding a title for section
     messageContent += `<b>${ctx.i18n.t('orderItems.additions')}</b>\n`;
-    additionsString = getAdditionsString(additions);
+    additionsString = getAdditionsString(additives);
     messageContent += additionsString;
-  }
+  }*/
 
   if (price) {
     messageContent += `${ctx.i18n.t('scenes.order.totalPrice')}: ${price}₽`;

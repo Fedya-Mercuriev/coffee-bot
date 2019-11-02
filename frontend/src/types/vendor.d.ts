@@ -20,12 +20,13 @@ declare module 'vendor' {
     messages: any;
     scenesMap: ScenesMapItem[];
     order: OrderObject;
-    currentOrderKey: string;
+    currentOrderId: string;
     orderInfoMsg: string;
     menu: object;
     router: Router;
     isAdmin: boolean;
     token: string;
+    statusTimerId: NodeJS.Timer;
   }
   interface Router {
     _route: string;

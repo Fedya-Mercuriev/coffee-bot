@@ -1,5 +1,9 @@
 import { ContextMessageUpdate } from 'telegraf';
-import { composeOrderInfoMessage, updateOrderInfoMsg } from '../controllers/order/helpers';
+import _ from 'lodash';
+import {
+  composeOrderInfoMessage,
+  updateOrderInfoMsg
+} from '../controllers/order/helpers';
 
 export default async function updateOrderInfo(
   ctx: ContextMessageUpdate,
@@ -10,11 +14,11 @@ export default async function updateOrderInfo(
 
     if (args.order) {
       await ctx.answerCbQuery(`${ctx.i18n.t('status.update_order')}...`);
+      const orderItems = _.pickBy(args.order, (value, key) => key !== 'type');
+      const orderSection = ctx.session.order.getOrderItem(args.order.type);
 
-      for (let prop in ctx.session.order) {
-        if (ctx.session.order.hasOwnProperty(prop) && args.order[prop]) {
-          ctx.session.order[prop] = args.order[prop];
-        }
+      for (let prop in orderItems) {
+        orderSection[prop] = orderItems[prop];
       }
       const orderInfo = await composeOrderInfoMessage(ctx);
       await updateOrderInfoMsg(ctx, orderInfo);

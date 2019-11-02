@@ -5,6 +5,7 @@ import { GoodVolume } from './good-volume';
 interface OrderObject {
   [key: string]: any;
   items: Map<string, OrderItem>;
+  getOrderItem: Function;
 }
 interface OrderItem {
   [key: string]: any;

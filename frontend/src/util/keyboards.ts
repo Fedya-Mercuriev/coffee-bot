@@ -3,7 +3,6 @@ import { EnumerableObject } from 'vendor';
 import app from '../_app';
 import generateRandomString from './generate-random-string';
 import extractProps from './extract-props-from-object';
-import _ from 'lodash';
 import { displayError } from './error-handler';
 
 interface DisplayMenuOptions {
@@ -26,11 +25,10 @@ function composeCallbackData(ctx: ContextMessageUpdate, items: any): string {
   for (let key in items) {
     if (items.hasOwnProperty(key)) {
       if (key !== 'name') {
-        if (_.isPlainObject(items[key])) {
-          data = extractProps(items[key]);
-        } else {
-          data[key] = items[key];
-        }
+        data[key] = items[key];
+      }
+      if (key === 'data') {
+        data = extractProps(items[key]);
       }
     }
   }

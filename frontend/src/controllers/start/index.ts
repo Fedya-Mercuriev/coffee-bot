@@ -46,18 +46,23 @@ start.enter(
         }
       }
     };
-    menuStructure = new MenuStructure(
-      JSON.stringify(menuStructure)
-    ).processButtons(addLocaleToMenu, ctx, 'menus.main');
     if (!ctx.session.started) {
       await app.start(ctx);
       await login(ctx);
       ctx.botScenes.iAmHere(ctx, sceneId);
+      menuStructure = new MenuStructure(
+        ctx,
+        JSON.stringify(menuStructure)
+      ).processButtons(addLocaleToMenu, ctx, 'menus.main');
       await displayMenu(ctx, menuStructure.menu, {
         message: ctx.i18n.t('scenes.start.welcome')
       });
     } else {
       await clearScene(ctx);
+      menuStructure = new MenuStructure(
+        ctx,
+        JSON.stringify(menuStructure)
+      ).processButtons(addLocaleToMenu, ctx, 'menus.main');
       await displayMenu(ctx, menuStructure.menu, {
         message: ctx.i18n.t('scenes.start.welcome')
       });

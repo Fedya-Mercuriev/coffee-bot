@@ -39,7 +39,7 @@ order.enter(
           ctx.botScenes.iAmHere(ctx, 'order_goods');
           return ctx.scene.enter('order_goods');
         }
-        menuStructure = new MenuStructure(response)
+        menuStructure = new MenuStructure(ctx, response)
           .processButtons(normalizeButtonProperties)
           .processButtons(navigationAdder, 'order_goods')
           .addBackButton(ctx);

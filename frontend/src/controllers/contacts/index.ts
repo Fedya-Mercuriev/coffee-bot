@@ -13,7 +13,7 @@ const contacts = new Scene(sceneId);
 contacts.use(navigateToScene, invokeFunction);
 
 contacts.enter(async (ctx: ContextMessageUpdate) => {
-  const menuStructure = new MenuStructure('').addBackButton(ctx);
+  const menuStructure = new MenuStructure(ctx, '').addBackButton(ctx);
   await displayMenu(ctx, menuStructure.menu, {
     message: ctx.i18n.t('scenes.contacts.content')
   });

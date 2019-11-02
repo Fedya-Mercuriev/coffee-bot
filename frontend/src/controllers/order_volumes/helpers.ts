@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Volume } from 'volumes';
 
 /**
@@ -37,6 +38,11 @@ export function navigationAdder(items: any, scenes: string[]): any {
  * Gets data from teh response object and composes a button data, that includes volume title, amount and price
  **/
 
-export function composeGoodVolumeData(button: Volume) {
-
+export function composeButtonTitle(button, volumes: Volume[]): any {
+  const volumeObj = _.find(volumes, ['volume_id', button.volume]);
+  return Object.assign(button, {
+    name: `${volumeObj.volume}(${volumeObj.unit_of_measure}) - ${parseFloat(
+      button.price
+    )}₽`
+  });
 }

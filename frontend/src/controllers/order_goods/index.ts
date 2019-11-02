@@ -9,6 +9,7 @@ import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import updateOrderInfo from '../../middlewares/update-order-info';
 import navigationAdder from './helpers';
+import composeOrderData from '../../util/compose-order-data';
 import { displayMenu } from '../../util/keyboards';
 
 const sceneId = 'order_goods';
@@ -22,9 +23,9 @@ goods.enter(
     let menuStructure = null;
     let goodVolumes: GoodVolume[];
     let goodTypeId: number = null;
-    await load(ctx.session.route, ctx).then(
+    await load(ctx.session.route, ctx, null, 'menu').then(
       async (response: string): Promise<string | void> => {
-        menuStructure = new MenuStructure(response);
+        menuStructure = new MenuStructure(ctx, response);
         goodTypeId = JSON.parse(response)[0].goodtype;
       }
     );
@@ -39,6 +40,7 @@ goods.enter(
         'order_good_volume',
         'order_additives'
       ])
+      .processButtons(composeOrderData, { type: 'good', stripKeys: 'name' })
       .addBackButton(ctx);
     await displayMenu(ctx, menuStructure.menu, {
       message:

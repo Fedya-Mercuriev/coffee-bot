@@ -12,7 +12,7 @@ const about = new Scene(sceneId);
 about.use(navigateToScene);
 
 about.enter(async (ctx: ContextMessageUpdate) => {
-  const menuStructure = new MenuStructure('').addBackButton(ctx);
+  const menuStructure = new MenuStructure(ctx, '').addBackButton(ctx);
 
   // ctx.session.messages.clearStorage();
   await displayMenu(ctx, menuStructure.menu, {

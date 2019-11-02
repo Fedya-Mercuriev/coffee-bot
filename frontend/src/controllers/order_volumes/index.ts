@@ -6,7 +6,7 @@ import Stage from 'telegraf/stage';
 import navigateScene from '../../middlewares/navigate-scene';
 import invokeFunction from '../../middlewares/invoke-function';
 import updateOrderInfo from '../../middlewares/update-order-info';
-import { navigationAdder } from './helpers';
+import { composeButtonTitle } from './helpers';
 import load from '../../util/load';
 import MenuStructure from '../../util/prepare-menu-structure';
 import { displayMenu } from '../../util/keyboards';
@@ -32,13 +32,10 @@ amount.enter(async (ctx: ContextMessageUpdate) => {
     }
   );
   await load(ctx.session.route, ctx).then(response => {
-    menuStructure = new MenuStructure(response)
-      .processButtons((button: GoodVolume) => {
-        console.log(button);
-      })
+    menuStructure = new MenuStructure(ctx, response)
+      .processButtons(composeButtonTitle, volumes)
       .addBackButton(ctx);
   });
-
   await displayMenu(ctx, menuStructure.menu, {
     message: ctx.i18n.t('scenes.amount.welcome')
   });

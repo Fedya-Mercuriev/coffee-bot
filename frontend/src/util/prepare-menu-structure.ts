@@ -40,7 +40,7 @@ export default class MenuStructure {
   // Removes all the properties that aren't name, description or plain objects
   private _tidyStructure(): void {
     function _modifyButton(button: any): void {
-      let keysToExclude = ['name', 'description', 'url', 'scene', 'cb', 'data'];
+      let keysToExclude = ['name', 'description', 'url', 'scene', 'cb', 'data', 'order'];
       for (let key in button) {
         if (button.hasOwnProperty(key) && keysToExclude.indexOf(key) === -1) {
           delete button[key];
